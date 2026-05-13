@@ -1,0 +1,110 @@
+<view class="page">
+  <!-- Header -->
+  <view class="header">
+    <text class="h-title">真心社区</text>
+    <text class="h-sub">与万千同好共勉</text>
+  </view>
+
+  <view class="body">
+    <!-- Daily Quote -->
+    <view class="daily-card" bindtap="copyDaily">
+      <view class="daily-label">今日箴言</view>
+      <text class="daily-text">"{{dailyQuote.text}}"</text>
+      <text class="daily-author">— {{dailyQuote.author}}</text>
+    </view>
+
+    <!-- Loading Skeleton -->
+    <view wx:if="{{loading}}" class="skeleton-wrap">
+      <view class="skeleton-card">
+        <view class="skeleton-line w60"></view>
+        <view class="skeleton-line w80"></view>
+        <view class="skeleton-line w40"></view>
+      </view>
+      <view class="skeleton-card">
+        <view class="skeleton-line w50"></view>
+        <view class="skeleton-line w90"></view>
+      </view>
+    </view>
+
+    <!-- Leaderboard -->
+    <view class="sec" wx:if="{{!loading}}">
+      <view class="rank-head">
+        <text class="sec-title">🏆 付出排行榜</text>
+        <text class="rank-mine">你 · 第 {{yourRank}} 名 · {{yourScore}} 分</text>
+      </view>
+      <view class="rank-list">
+        <view class="rank-row {{item.isYou ? 'you' : ''}}" wx:for="{{rankingTop3}}" wx:key="name">
+          <text class="rank-pos {{item.posClass}}">{{item.rank}}</text>
+          <view class="rank-avatar">{{item.avatar}}</view>
+          <view class="rank-info">
+            <text class="rank-name">{{item.name}}</text>
+            <text class="rank-title">{{item.title}}</text>
+          </view>
+          <text class="rank-score">{{item.scoreDisplay}}</text>
+        </view>
+      </view>
+      <view class="rank-more" bindtap="goRankingPage">
+        <text>查看完整排行榜 ›</text>
+      </view>
+    </view>
+
+    <!-- Tree Hole Preview -->
+    <view class="sec" wx:if="{{!loading}}">
+      <view class="rank-head">
+        <text class="sec-title">🌳 匿名树洞</text>
+        <text class="rank-mine">{{confessions.length}} 条倾诉</text>
+      </view>
+      <view wx:if="{{confessions.length === 0}}" class="th-empty">
+        <text class="th-empty-text">还没有人倾诉，来说点什么吧</text>
+      </view>
+      <view class="posts">
+        <view class="post" wx:for="{{confessionsPreview}}" wx:key="id">
+          <view class="post-head">
+            <view class="post-avatar">🕳️</view>
+            <view class="post-info">
+              <text class="post-user">匿名舔友</text>
+              <text class="post-time">{{item.timeAgo}}</text>
+            </view>
+          </view>
+          <text class="post-content">{{item.content}}</text>
+          <view class="post-foot">
+            <view class="vote-btn" data-id="{{item.id}}" bindtap="voteSympathy">
+              <text>😢 心疼 {{item.sympathy}}</text>
+            </view>
+            <view class="vote-btn deserve" data-id="{{item.id}}" bindtap="voteDeserved">
+              <text>😏 活该 {{item.deserved}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="rank-more" bindtap="goTreeholePage" wx:if="{{confessions.length > 3}}">
+        <text>查看全部树洞 ›</text>
+      </view>
+    </view>
+
+  </view>
+
+  <!-- FAB: New Post -->
+  <view class="fab" bindtap="openPostForm">
+    <text class="fab-icon">✏️</text>
+  </view>
+
+  <!-- Post Form Overlay -->
+  <view wx:if="{{showPostForm}}" class="overlay" bindtap="closePostForm"></view>
+  <view wx:if="{{showPostForm}}" class="sheet">
+    <view class="sheet-bar"></view>
+    <text class="sheet-title">匿名倾诉</text>
+    <textarea
+      class="sheet-textarea"
+      placeholder="说出你的心里话..."
+      value="{{postInput}}"
+      bindinput="onPostInput"
+      maxlength="500"
+      auto-focus
+    />
+    <view class="sheet-count">{{postInput.length}} / 500</view>
+    <view class="sheet-submit" bindtap="submitPost">
+      <text>匿名发布</text>
+    </view>
+  </view>
+</view>

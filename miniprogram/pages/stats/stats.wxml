@@ -1,0 +1,142 @@
+<view class="page">
+  <!-- Header with Profile -->
+  <view class="header">
+    <view class="profile-row">
+      <button class="avatar-btn" open-type="chooseAvatar" bindchooseavatar="onChooseAvatar">
+        <image wx:if="{{avatarUrl}}" class="avatar-img" src="{{avatarUrl}}" mode="aspectFill" />
+        <text wx:else class="avatar-placeholder">🐾</text>
+      </button>
+      <view class="profile-info">
+        <input
+          type="nickname"
+          class="nickname-input"
+          placeholder="点击设置昵称"
+          value="{{nickname}}"
+          bindchange="onNicknameChange"
+          placeholder-style="color:#ccc;"
+        />
+        <text class="h-sub">看透你体内的真心灵魂</text>
+      </view>
+    </view>
+
+    <!-- Stat Grid -->
+    <view class="grid" wx:if="{{totalEvents > 0}}">
+      <view class="g-card">
+        <text class="g-num">{{totalEvents}}</text>
+        <text class="g-label">总次数</text>
+      </view>
+      <view class="g-card">
+        <text class="g-num">¥{{totalAmount}}</text>
+        <text class="g-label">总花费</text>
+      </view>
+      <view class="g-card">
+        <text class="g-num">{{avgSimp}}</text>
+        <text class="g-label">平均真心</text>
+      </view>
+      <view class="g-card">
+        <text class="g-num">{{targetCount}}</text>
+        <text class="g-label">对象数</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Body -->
+  <view class="body">
+    <view wx:if="{{totalEvents === 0}}" class="empty">
+      <text class="empty-icon">🎉</text>
+      <text class="empty-text">清醒如你，还没开始沦陷</text>
+    </view>
+
+    <view wx:else>
+      <!-- Rank Card -->
+      <view class="rank-card">
+        <view class="rank-top">
+          <view class="rank-badge">{{rankInfo.icon}}</view>
+          <view class="rank-info">
+            <text class="rank-title">{{rankInfo.title}}</text>
+            <text class="rank-desc">{{rankInfo.desc}}</text>
+          </view>
+        </view>
+        <view class="rank-bar-wrap">
+          <view class="rank-bar-bg">
+            <view class="rank-bar-fill" style="width: {{rankPercent}}%"></view>
+          </view>
+          <view class="rank-bar-foot">
+            <text class="rank-hint" wx:if="{{rankInfo.next}}">{{rankInfo.next}}</text>
+            <text class="rank-hint" wx:else>最高境界</text>
+            <text class="rank-pct">{{rankPercent}}%</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Target Leaderboard -->
+      <view class="sec" wx:if="{{topTargets.length > 0}}">
+        <text class="sec-title">对象排行榜</text>
+        <view class="board">
+          <view class="b-row" wx:for="{{topTargets}}" wx:key="name">
+            <text class="b-pos pos-{{index + 1}}">{{index + 1}}</text>
+            <view class="b-info">
+              <text class="b-name">{{item.name}}</text>
+              <text class="b-sub">共 {{item.count}} 次</text>
+            </view>
+            <text class="b-val">¥{{item.total}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Action Leaderboard -->
+      <view class="sec" wx:if="{{topActions.length > 0}}">
+        <text class="sec-title">高频行为</text>
+        <view class="board">
+          <view class="b-row" wx:for="{{topActions}}" wx:key="name">
+            <text class="b-pos pos-{{index + 1}}">{{index + 1}}</text>
+            <text class="b-name f1">{{item.name}}</text>
+            <text class="b-val">{{item.count}} 次</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Fun Zone -->
+    <view class="sec">
+      <text class="sec-title">🎮 趣味玩法</text>
+      <view class="data-actions">
+        <view class="data-btn" bindtap="goAchievements">
+          <text class="data-btn-icon">🏅</text>
+          <view class="data-btn-text">
+            <text class="data-btn-title">成就墙</text>
+            <text class="data-btn-sub">已解锁 {{unlockedCount}} / {{totalAchievements}}</text>
+          </view>
+        </view>
+        <view class="data-btn" bindtap="goQuiz">
+          <text class="data-btn-icon">🧪</text>
+          <view class="data-btn-text">
+            <text class="data-btn-title">真心等级测试</text>
+            <text class="data-btn-sub">10 道灵魂拷问，测出你的真心指数</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Data Management (always shown) -->
+    <view class="sec">
+      <text class="sec-title">数据管理</text>
+      <view class="data-actions">
+        <view class="data-btn" bindtap="exportData">
+          <text class="data-btn-icon">📋</text>
+          <view class="data-btn-text">
+            <text class="data-btn-title">导出数据</text>
+            <text class="data-btn-sub">复制 JSON 到剪贴板</text>
+          </view>
+        </view>
+        <view class="data-btn danger" bindtap="clearAllData">
+          <text class="data-btn-icon">🗑️</text>
+          <view class="data-btn-text">
+            <text class="data-btn-title">清空所有记录</text>
+            <text class="data-btn-sub">删除全部数据，不可恢复</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

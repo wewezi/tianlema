@@ -1,0 +1,263 @@
+.page {
+  min-height: 100vh;
+  padding-bottom: 180rpx;
+  background: #fafafa;
+}
+
+/* ===== Header ===== */
+.header {
+  background: #fff;
+  padding: 40rpx 32rpx 28rpx;
+  border-bottom: 1rpx solid #eee;
+}
+/* ===== Profile Row ===== */
+.profile-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+.avatar-btn {
+  width: 88rpx !important;
+  height: 88rpx !important;
+  min-width: 0;
+  border-radius: 50%;
+  padding: 0 !important;
+  margin: 0 !important;
+  overflow: hidden;
+  background: #fff0f3;
+  border: 1rpx solid #f5d5db;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  line-height: 88rpx;
+  box-sizing: border-box;
+}
+.avatar-btn::after { display: none; }
+.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+}
+.avatar-placeholder {
+  font-size: 40rpx;
+  line-height: 88rpx;
+  text-align: center;
+}
+.profile-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+.nickname-input {
+  font-size: 34rpx;
+  font-weight: 700;
+  color: #1a1a1a;
+  height: 48rpx;
+  line-height: 48rpx;
+  padding: 0;
+}
+.h-sub { font-size: 22rpx; color: #999; margin-top: 2rpx; display: block; }
+
+/* ===== Body ===== */
+.body { padding: 24rpx 28rpx 0; }
+
+/* Empty */
+.empty {
+  text-align: center; padding: 48rpx 0 32rpx;
+  display: flex; flex-direction: column; align-items: center; gap: 10rpx;
+}
+.empty-icon { font-size: 56rpx; }
+.empty-text { font-size: 24rpx; color: #888; }
+
+/* ===== Rank Card ===== */
+.rank-card {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 28rpx;
+  border: 1rpx solid #eee;
+  margin-bottom: 24rpx;
+}
+.rank-top {
+  display: flex; align-items: center; gap: 20rpx;
+  margin-bottom: 28rpx;
+}
+.rank-badge {
+  width: 72rpx; height: 72rpx;
+  border-radius: 16rpx;
+  background: #fff0f3;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 44rpx;
+  flex-shrink: 0;
+}
+.rank-info { display: flex; flex-direction: column; }
+.rank-title { font-size: 32rpx; font-weight: 700; color: #1a1a1a; }
+.rank-desc { font-size: 22rpx; color: #888; margin-top: 2rpx; }
+
+.rank-bar-wrap {}
+.rank-bar-bg {
+  height: 8rpx;
+  background: #f0f0f0;
+  border-radius: 4rpx;
+  overflow: hidden;
+  margin-bottom: 10rpx;
+}
+.rank-bar-fill {
+  height: 100%;
+  background: #1a1a1a;
+  border-radius: 4rpx;
+  transition: width 0.6s ease;
+}
+.rank-bar-foot {
+  display: flex; justify-content: space-between; align-items: center;
+}
+.rank-hint { font-size: 20rpx; color: #999; }
+.rank-pct { font-size: 20rpx; font-weight: 700; color: #1a1a1a; }
+
+/* ===== Stat Grid ===== */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  gap: 0;
+  margin-top: 24rpx;
+  background: #fafafa;
+  border-radius: 12rpx;
+  border: 1rpx solid #eee;
+  overflow: hidden;
+}
+.g-card {
+  padding: 20rpx 12rpx;
+  text-align: center;
+  border-right: 1rpx solid #eee;
+}
+.g-card:last-child { border-right: none; }
+.g-num {
+  font-size: 30rpx; font-weight: 800; color: #1a1a1a;
+  display: block;
+}
+.g-label {
+  font-size: 18rpx; color: #aaa; font-weight: 500;
+  margin-top: 2rpx; display: block;
+}
+
+/* ===== Leaderboard ===== */
+.sec { margin-bottom: 24rpx; }
+.sec-title {
+  font-size: 24rpx; font-weight: 600; color: #999;
+  margin-bottom: 14rpx; display: block;
+  text-transform: uppercase; letter-spacing: 1rpx;
+}
+
+.board {
+  background: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  border: 1rpx solid #eee;
+}
+.b-row {
+  display: flex; align-items: center;
+  padding: 20rpx 24rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.b-row:last-child { border-bottom: none; }
+
+.b-pos {
+  width: 40rpx; height: 40rpx;
+  border-radius: 10rpx;
+  background: #f5f5f5;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20rpx; font-weight: 800; color: #999;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+.pos-1 { background: #f59e0b; color: #fff; }
+.pos-2 { background: #94a3b8; color: #fff; }
+.pos-3 { background: #d97706; color: #fff; }
+
+.b-info { flex: 1; display: flex; flex-direction: column; }
+.b-name { font-size: 26rpx; font-weight: 600; color: #1a1a1a; }
+.b-sub { font-size: 20rpx; color: #888; margin-top: 2rpx; }
+.b-val { font-size: 26rpx; font-weight: 800; color: #1a1a1a; flex-shrink: 0; }
+.f1 { flex: 1; }
+
+/* ===== Achievements ===== */
+.ach-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14rpx;
+}
+.ach-head .sec-title { margin-bottom: 0; }
+.ach-count {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #666;
+  background: #f5f5f5;
+  padding: 4rpx 14rpx;
+  border-radius: 4rpx;
+}
+.ach-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12rpx;
+}
+.ach-item {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx 10rpx;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  border: 1rpx solid #eee;
+}
+.ach-item:active { opacity: 0.7; }
+.ach-item.locked {
+  opacity: 0.25;
+  filter: grayscale(1);
+}
+.ach-icon { font-size: 40rpx; }
+.ach-title {
+  font-size: 22rpx;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.ach-desc {
+  font-size: 18rpx;
+  color: #bbb;
+  line-height: 1.3;
+}
+
+/* Data management */
+.data-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+.data-btn {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 20rpx 24rpx;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  border: 1rpx solid #eee;
+}
+.data-btn:active { opacity: 0.7; }
+.data-btn-icon {
+  width: 52rpx; height: 52rpx;
+  border-radius: 12rpx;
+  background: #f5f5f5;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28rpx;
+  flex-shrink: 0;
+}
+.data-btn.danger .data-btn-icon { background: #fef2f2; }
+.data-btn-text { flex: 1; display: flex; flex-direction: column; gap: 2rpx; }
+.data-btn-title { font-size: 26rpx; font-weight: 600; color: #1a1a1a; }
+.data-btn.danger .data-btn-title { color: #dc2626; }
+.data-btn-sub { font-size: 20rpx; color: #888; }
+

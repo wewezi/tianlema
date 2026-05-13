@@ -1,0 +1,62 @@
+<view class="page">
+  <!-- Header -->
+  <view class="th-header">
+    <text class="th-title">🌳 匿名树洞</text>
+    <text class="th-sub">说出你的舔狗故事，身份绝对保密</text>
+  </view>
+
+  <!-- List -->
+  <view class="th-list">
+    <view wx:if="{{loading}}" class="th-skeleton">
+      <view class="th-skel-card" wx:for="{{[1,2,3]}}" wx:key="*this">
+        <view class="th-skel-line long"></view>
+        <view class="th-skel-line medium"></view>
+        <view class="th-skel-line short"></view>
+      </view>
+    </view>
+
+    <view wx:elif="{{confessions.length === 0}}" class="th-empty">
+      <text class="th-empty-icon">🕳️</text>
+      <text class="th-empty-text">树洞空空的，来说点什么吧</text>
+    </view>
+
+    <view class="th-card" wx:for="{{confessions}}" wx:key="id" wx:if="{{!loading}}">
+      <text class="th-content">{{item.content}}</text>
+      <view class="th-foot">
+        <text class="th-time">{{item.timeAgo}}</text>
+        <view class="th-votes">
+          <view class="th-vote" data-id="{{item.id}}" bindtap="voteSympathy">
+            <text>😢 心疼 {{item.sympathy}}</text>
+          </view>
+          <view class="th-vote deserve" data-id="{{item.id}}" bindtap="voteDeserved">
+            <text>😏 活该 {{item.deserved}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- FAB -->
+  <view class="th-fab" bindtap="openForm">
+    <text class="th-fab-icon">✏️</text>
+  </view>
+
+  <!-- Post Form Overlay -->
+  <view wx:if="{{showForm}}" class="th-overlay" bindtap="closeForm"></view>
+  <view wx:if="{{showForm}}" class="th-sheet">
+    <view class="th-sheet-bar"></view>
+    <text class="th-sheet-title">写下你的故事</text>
+    <textarea
+      class="th-textarea"
+      placeholder="匿名倾诉你的舔狗经历..."
+      value="{{inputText}}"
+      bindinput="onInput"
+      maxlength="500"
+      auto-focus
+    />
+    <view class="th-char-count">{{inputText.length}} / 500</view>
+    <view class="th-submit" bindtap="submit">
+      <text>匿名发布</text>
+    </view>
+  </view>
+</view>

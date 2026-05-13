@@ -1,0 +1,56 @@
+<view class="page">
+  <!-- Start Screen -->
+  <view wx:if="{{state === 'start'}}" class="start-screen">
+    <text class="start-icon" style="color:#ff4d6a;">❤</text>
+    <text class="start-title">真心等级测试</text>
+    <text class="start-desc">10 道灵魂拷问，测出你的真心指数</text>
+    <view class="start-btn" bindtap="startQuiz">
+      <text>开始测试</text>
+    </view>
+    <view class="back-link" bindtap="goBack">
+      <text>返回</text>
+    </view>
+  </view>
+
+  <!-- Playing -->
+  <view wx:elif="{{state === 'playing'}}" class="quiz-screen">
+    <view class="quiz-progress">
+      <view class="quiz-bar-bg">
+        <view class="quiz-bar-fill" style="width: {{progress}}%"></view>
+      </view>
+      <text class="quiz-count">{{currentIndex + 1}} / {{totalQuestions}}</text>
+    </view>
+    <view class="quiz-card">
+      <text class="quiz-q">{{currentQ.q}}</text>
+      <view class="quiz-options">
+        <view
+          class="quiz-opt"
+          wx:for="{{currentQ.options}}"
+          wx:key="text"
+          data-score="{{item.score}}"
+          bindtap="pickOption"
+        >
+          <text>{{item.text}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Result -->
+  <view wx:elif="{{state === 'result'}}" class="result-screen">
+    <view class="result-card" style="border-color: {{result.color}}">
+      <text class="result-icon">{{result.icon}}</text>
+      <text class="result-title" style="color: {{result.color}}">{{result.title}}</text>
+      <text class="result-score">得分：{{totalScore}} / {{totalQuestions * 5}}</text>
+      <text class="result-desc">{{result.desc}}</text>
+    </view>
+    <view class="result-actions">
+      <view class="result-btn primary" bindtap="shareResult">
+        <text>分享结果</text>
+      </view>
+      <view class="result-btn" bindtap="retry">
+        <text>重新测试</text>
+      </view>
+    </view>
+  </view>
+</view>

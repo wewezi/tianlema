@@ -1,0 +1,16 @@
+<view class="page">
+  <view class="header">
+    <text class="h-title">成就墙</text>
+    <text class="h-sub">已解锁 {{unlockedCount}} / {{totalCount}}</text>
+  </view>
+
+  <view class="body">
+    <view class="ach-grid">
+      <view class="ach-item {{item.unlocked ? '' : 'locked'}}" wx:for="{{achievements}}" wx:key="title">
+        <text class="ach-icon">{{item.icon}}</text>
+        <text class="ach-title">{{item.title}}</text>
+        <text class="ach-desc">{{item.desc}}</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,30 @@
+page {
+  --c-pri: #ff6b81;
+  --c-pri-dark: #ff4757;
+  --c-pri-light: #ffb3c1;
+  --c-pri-pale: rgba(255, 107, 129, 0.07);
+  --c-bg: #f7f3f5;
+  --c-card: #ffffff;
+  --c-border: rgba(0, 0, 0, 0.05);
+  --c-text: #16192c;
+  --c-sub: #6b7280;
+  --c-hint: #9ca3af;
+  --c-gold: #f59e0b;
+  --r: 24rpx;
+  --r-lg: 36rpx;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-size: 28rpx;
+  line-height: 1.5;
+}
+
+@keyframes sheetUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

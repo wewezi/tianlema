@@ -1,0 +1,82 @@
+.page {
+  min-height: 100vh;
+  background: #fafafa;
+}
+
+.header {
+  background: #fff;
+  padding: 40rpx 32rpx 32rpx;
+  border-bottom: 1rpx solid #eee;
+}
+.h-title { font-size: 40rpx; font-weight: 900; color: #1a1a1a; display: block; letter-spacing: -1rpx; }
+.h-sub {
+  font-size: 22rpx;
+  color: #999;
+  margin-top: 4rpx;
+  display: block;
+}
+
+.body { padding: 24rpx 28rpx; }
+
+.rank-list {
+  background: #fff;
+  border-radius: 12rpx;
+  overflow: hidden;
+  border: 1rpx solid #eee;
+}
+.rank-row {
+  display: flex;
+  align-items: center;
+  padding: 22rpx 24rpx;
+  gap: 16rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+.rank-row:last-child { border-bottom: none; }
+.rank-row.you {
+  background: #fffbfc;
+}
+
+.rank-pos {
+  width: 40rpx;
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #ccc;
+  text-align: center;
+  flex-shrink: 0;
+}
+.rank-pos.pos-1 { color: #f59e0b; }
+.rank-pos.pos-2 { color: #94a3b8; }
+.rank-pos.pos-3 { color: #d97706; }
+
+.rank-avatar {
+  width: 52rpx;
+  height: 52rpx;
+  border-radius: 12rpx;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28rpx;
+  flex-shrink: 0;
+}
+.rank-row.you .rank-avatar {
+  background: #fff0f3;
+}
+
+.rank-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2rpx;
+  min-width: 0;
+}
+.rank-name { font-size: 26rpx; font-weight: 600; color: #1a1a1a; }
+.rank-row.you .rank-name { color: #ff4d6a; }
+.rank-title { font-size: 20rpx; color: #888; }
+
+.rank-score {
+  font-size: 26rpx;
+  font-weight: 800;
+  color: #1a1a1a;
+  flex-shrink: 0;
+}

@@ -1,0 +1,166 @@
+<view class="page">
+  <!-- Header -->
+  <view class="header">
+    <view class="header-top">
+      <view class="greet-box">
+        <text class="greet-text">{{greeting}}</text>
+        <text class="greet-date">{{dateText}}</text>
+      </view>
+      <image class="logo-badge" src="/assets/logo.png" mode="aspectFit"></image>
+    </view>
+
+    <!-- Dashboard -->
+    <view class="dash">
+      <view class="dash-item">
+        <text class="dash-num">{{weekAmount}}</text>
+        <text class="dash-unit">元 · 本周花费</text>
+      </view>
+      <view class="dash-line"></view>
+      <view class="dash-item">
+        <text class="dash-num">{{weekTotal}}</text>
+        <text class="dash-unit">次 · 本周记录</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Body -->
+  <view class="body">
+    <!-- Daily Challenge -->
+    <view class="challenge-card {{challengeDone ? 'done' : ''}}">
+      <view class="challenge-left">
+        <text class="challenge-label">🎯 今日挑战</text>
+        <text class="challenge-text">{{challengeText}}</text>
+        <text class="challenge-meta">+{{challengeBonus}}分 · 已连续{{challengeStreak}}天</text>
+      </view>
+      <view class="challenge-btn {{challengeDone ? 'disabled' : ''}}" bindtap="doneChallenge">
+        <text>{{challengeDone ? '✓' : '完成'}}</text>
+      </view>
+    </view>
+
+    <!-- Week Chart -->
+    <view class="card">
+      <text class="card-title">本周活跃</text>
+      <view class="week-grid">
+        <view class="day {{item.isToday ? 'today' : ''}}" wx:for="{{weekDays}}" wx:key="date">
+          <view class="bar-track">
+            <view class="bar-fill" style="height: {{item.barH}}%"></view>
+          </view>
+          <text class="day-name">{{item.label}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Recent Records -->
+    <view class="sec-head">
+      <text class="sec-title">最近记录</text>
+    </view>
+
+    <view wx:if="{{weekRecords.length === 0}}" class="empty">
+      <text class="empty-icon">🪹</text>
+      <text class="empty-text">这一周还没有记录哦</text>
+    </view>
+
+    <view class="rec-list">
+      <view class="swipe-cell" wx:for="{{weekRecords}}" wx:key="id">
+        <view class="swipe-content" style="transform: translateX({{item.swipeX || 0}}px)"
+          data-idx="{{index}}"
+          bindtouchstart="onSwipeStart"
+          bindtouchmove="onSwipeMove"
+          bindtouchend="onSwipeEnd"
+        >
+          <view class="rec">
+            <view class="rec-icon" style="background: {{item.color}}1f; color: {{item.color}};">
+              <text>{{item.icon}}</text>
+            </view>
+            <view class="rec-body">
+              <view class="rec-row1">
+                <text class="rec-action">{{item.action}}</text>
+                <text class="rec-target" wx:if="{{item.target}}">@{{item.target}}</text>
+              </view>
+              <text class="rec-meta">{{item.dateLabel}} · {{item.note || '无备注'}}</text>
+            </view>
+            <view class="rec-end">
+              <text class="rec-amt" wx:if="{{item.amount > 0}}">¥{{item.amount}}</text>
+              <text class="rec-tag">{{item.simpLabel}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="swipe-del" data-id="{{item.id}}" bindtap="deleteWeekRecord">
+          <text>删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- FAB -->
+<view class="fab" bindtap="openForm">
+  <text class="fab-plus">+</text>
+</view>
+
+<!-- Overlay + Form Sheet -->
+<view wx:if="{{showForm}}" class="overlay" bindtap="closeForm"></view>
+<view wx:if="{{showForm}}" class="sheet">
+  <view class="sheet-bar"></view>
+  <text class="sheet-title">记一笔</text>
+
+  <view class="field">
+    <text class="label">做了什么</text>
+    <view class="tags">
+      <view
+        class="tag {{selectedAction === item ? 'on' : ''}}"
+        wx:for="{{actions}}"
+        wx:key="*this"
+        bindtap="pickAction"
+        data-v="{{item}}"
+      >{{item}}</view>
+    </view>
+    <input class="ipt" placeholder="自定义行为..." value="{{customAction}}" bindinput="onCustomAction" placeholder-style="color:#b0b8c8;" />
+  </view>
+
+  <view class="field">
+    <text class="label">为了谁</text>
+    <input class="ipt" placeholder="TA 的名字" value="{{target}}" bindinput="onTarget" placeholder-style="color:#b0b8c8;" />
+  </view>
+
+  <view class="row-2" wx:if="{{hasAmount}}">
+    <view class="field f1">
+      <text class="label">花了多少 (元)</text>
+      <input class="ipt" type="digit" placeholder="0.00" value="{{amount}}" bindinput="onAmount" placeholder-style="color:#b0b8c8;" />
+    </view>
+    <view class="field f1">
+      <text class="label">真心指数</text>
+      <view class="stars">
+        <text
+          class="star {{index < simpIndex ? 'on' : ''}}"
+          wx:for="{{[1,2,3,4,5]}}"
+          wx:key="*this"
+          data-v="{{item}}"
+          bindtap="pickStar"
+        >★</text>
+      </view>
+      <text class="star-hint">{{simpLabels[simpIndex - 1]}}</text>
+    </view>
+  </view>
+
+  <view class="field" wx:else>
+    <text class="label">真心指数</text>
+    <view class="stars">
+      <text
+        class="star {{index < simpIndex ? 'on' : ''}}"
+        wx:for="{{[1,2,3,4,5]}}"
+        wx:key="*this"
+        data-v="{{item}}"
+        bindtap="pickStar"
+      >★</text>
+    </view>
+    <text class="star-hint">{{simpLabels[simpIndex - 1]}}</text>
+  </view>
+
+  <view class="field">
+    <text class="label">备注日记</text>
+    <textarea class="txa" placeholder="今天也是充满希望的一天..." value="{{note}}" bindinput="onNote" maxlength="200" placeholder-style="color:#b0b8c8;" />
+  </view>
+
+  <button class="btn-submit" bindtap="submit">保存记录</button>
+</view>
