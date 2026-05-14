@@ -73,12 +73,6 @@
   box-shadow: 0 10rpx 40rpx rgba(0,0,0,0.03);
   margin-bottom: 60rpx;
 }
-.rc-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 40rpx;
-}
 
 /* Tabs Switcher */
 .comm-tabs-wrapper {
@@ -107,8 +101,6 @@
   box-shadow: 0 8rpx 20rpx var(--c-pri-pale, #ffe4e6);
 }
 
-.rc-title { font-size: 36rpx; font-weight: 800; color: var(--c-text, #333); }
-.rc-more { font-size: 26rpx; color: var(--c-sub, #999); font-weight: 600; }
 
 .rc-list {
   display: flex;
@@ -133,15 +125,6 @@
   display: flex;
   flex-direction: column;
 }
-.feed-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  margin-bottom: 30rpx;
-  padding-left: 10rpx;
-}
-.feed-title { font-size: 36rpx; font-weight: 800; color: var(--c-text, #333); }
-.feed-subtitle { font-size: 26rpx; color: var(--c-sub, #999); font-weight: 600; }
 
 .feed-list {
   display: flex;
@@ -182,7 +165,20 @@
   color: var(--c-pri, #ff4d6a);
 }
 .post-user { font-size: 28rpx; font-weight: 800; color: var(--c-text, #333); }
+.post-top-right {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
 .post-time { font-size: 24rpx; color: var(--c-hint, #bbb); }
+.post-delete {
+  font-size: 24rpx;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+  padding: 4rpx 16rpx;
+  border-radius: 20rpx;
+  font-weight: 600;
+}
 .post-content {
   font-size: 32rpx;
   line-height: 1.6;

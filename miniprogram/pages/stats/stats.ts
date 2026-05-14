@@ -1,4 +1,4 @@
-import { getRecords, saveRecords } from '../../utils/store'
+import { getRecords } from '../../utils/store'
 import { request, isLoggedIn, getUserInfo, updateProfile } from '../../utils/api'
 import { RANKS, calcScore, getRankProgress } from '../../utils/rank'
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../../utils/achievements'
@@ -82,63 +82,13 @@ Component({
         request<any>({ url: '/stats' })
           .then((data) => applyStats(this, data))
           .catch((err) => {
-            console.error('加载统计失败，使用本地数据', err)
-            this.loadLocalStats()
+            console.error('加载统计失败', err)
           })
-      } else {
-        this.loadLocalStats()
       }
     },
 
-    loadLocalStats() {
-      const records = getRecords()
-      if (records.length === 0) {
-        this.setData({
-          totalEvents: 0,
-          totalAmount: '0',
-          avgSimp: '0',
-          targetCount: 0,
-          rankInfo: DEFAULT_RANK,
-          rankPercent: 0,
-          topTargets: [],
-          topActions: [],
-        })
-        return
-      }
-
-      const score = calcScore(records)
-      const totalAmount = records.reduce((s, r) => s + r.amount, 0)
-      const avgSimp = records.reduce((s, r) => s + r.simpIndex, 0) / records.length
-      const uniqueTargets = new Set(records.map(r => r.target)).size
-
-      const targetMap: Record<string, { count: number; total: number }> = {}
-      const actionMap: Record<string, number> = {}
-      for (const r of records) {
-        if (!targetMap[r.target]) targetMap[r.target] = { count: 0, total: 0 }
-        targetMap[r.target].count++
-        targetMap[r.target].total += r.amount
-        actionMap[r.action] = (actionMap[r.action] || 0) + 1
-      }
-
-      applyStats(this, {
-        totalEvents: records.length,
-        totalAmount,
-        avgSimp,
-        targetCount: uniqueTargets,
-        score,
-        topTargets: Object.entries(targetMap)
-          .sort((a, b) => b[1].count - a[1].count)
-          .slice(0, 5)
-          .map(([name, data]) => ({ name, count: data.count, total: data.total })),
-        topActions: Object.entries(actionMap)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 5)
-          .map(([name, count]) => ({ name, count })),
-      })
-    },
-
-    loadAchievements() {
-      const records = getRecords()
+    async loadAchievements() {
+      const records = await getRecords()
       const unlocked = getUnlockedAchievements(records)
       const unlockedIds = new Set(unlocked.map(a => a.id))
       const achievements = ACHIEVEMENTS.map(a => ({
@@ -161,8 +111,8 @@ Component({
       wx.navigateTo({ url: '/pages/quiz/quiz' })
     },
 
-    exportData() {
-      const records = getRecords()
+    async exportData() {
+      const records = await getRecords()
       if (records.length === 0) {
         wx.showToast({ title: '暂无数据可导出', icon: 'none' })
         return
@@ -172,22 +122,6 @@ Component({
         data: json,
         success: () => {
           wx.showToast({ title: '已复制到剪贴板', icon: 'none' })
-        },
-      })
-    },
-
-    clearAllData() {
-      wx.showModal({
-        title: '确认清空',
-        content: '将删除所有记录，此操作不可恢复',
-        confirmText: '清空',
-        confirmColor: '#ef4444',
-        success: (res) => {
-          if (res.confirm) {
-            saveRecords([])
-            this.loadStats()
-            wx.showToast({ title: '已清空', icon: 'none' })
-          }
         },
       })
     },

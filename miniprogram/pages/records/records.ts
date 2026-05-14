@@ -106,8 +106,8 @@ Component({
       })
     },
 
-    loadRecords() {
-      const records = getRecords()
+    async loadRecords() {
+      const records = await getRecords()
       
       let allGroups = groupRecords(records)
       let displayGroups = allGroups
@@ -240,12 +240,19 @@ Component({
         title: '确认删除',
         content: '真的要删掉这条记录吗？',
         confirmColor: '#ef4444',
-        success: (res) => {
+        success: async (res) => {
           if (res.confirm) {
             wx.vibrateShort({ type: 'medium' })
-            deleteRecord(id)
-            wx.showToast({ title: '已删除', icon: 'none' })
-            this.loadRecords()
+            wx.showLoading({ title: '删除中...', mask: true })
+            try {
+              await deleteRecord(id)
+              wx.hideLoading()
+              wx.showToast({ title: '已删除', icon: 'none' })
+              this.loadRecords()
+            } catch (e) {
+              wx.hideLoading()
+              wx.showToast({ title: '删除失败', icon: 'none' })
+            }
           } else {
             // 取消时收回滑动
             this.loadRecords()

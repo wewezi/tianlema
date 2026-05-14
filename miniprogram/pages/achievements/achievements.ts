@@ -13,8 +13,8 @@ Component({
     },
   },
   methods: {
-    loadAchievements() {
-      var records = getRecords()
+    async loadAchievements() {
+      var records = await getRecords()
       var unlocked = getUnlockedAchievements(records)
       var unlockedIds: Record<string, boolean> = {}
       for (var i = 0; i < unlocked.length; i++) {

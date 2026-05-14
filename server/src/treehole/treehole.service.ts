@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common'
+import { Injectable, NotFoundException, ConflictException, ForbiddenException } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Repository, DataSource } from 'typeorm'
 import { Confession } from './entities/confession.entity'
@@ -52,5 +52,14 @@ export class TreeholeService {
       }
       return manager.save(confession)
     })
+  }
+
+  async remove(id: string, userId: number): Promise<void> {
+    const confession = await this.confessionRepo.findOne({ where: { id } })
+    if (!confession) throw new NotFoundException('不存在')
+    if (confession.userId !== userId) {
+      throw new ForbiddenException('只能删除自己的发布')
+    }
+    await this.confessionRepo.remove(confession)
   }
 }

@@ -49,7 +49,7 @@ Component({
       wx.stopPullDownRefresh()
     },
 
-    refresh() {
+    async refresh() {
       const now = new Date()
       const h = now.getHours()
       let greeting = '晚上好'
@@ -69,7 +69,7 @@ Component({
         challengeStreak: getChallengeStreak(),
       })
 
-      const all = getRecords()
+      const all = await getRecords()
       this.buildWeek(all)
     },
 

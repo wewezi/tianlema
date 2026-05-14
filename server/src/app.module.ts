@@ -11,6 +11,7 @@ import { Record } from './records/entities/record.entity'
 import { Post } from './community/entities/post.entity'
 import { PostLike } from './community/entities/post-like.entity'
 import { TreeholeModule } from './treehole/treehole.module'
+import { UploadModule } from './common/upload/upload.module'
 import { Confession } from './treehole/entities/confession.entity'
 import { ConfessionVote } from './treehole/entities/confession-vote.entity'
 import { HealthController } from './health.controller'
@@ -38,6 +39,7 @@ import { HealthController } from './health.controller'
     CommunityModule,
     StatsModule,
     TreeholeModule,
+    UploadModule,
   ],
   controllers: [HealthController],
 })

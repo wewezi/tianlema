@@ -1,4 +1,4 @@
-const BASE_URL = 'https://wx.we29.cn'
+export const BASE_URL = 'https://wx.we29.cn'
 
 function getToken(): string {
   return wx.getStorageSync('auth_token') || ''
@@ -42,7 +42,7 @@ export function request<T = any>(options: {
   })
 }
 
-export function getUserInfo(): { nickname?: string; avatarUrl?: string } {
+export function getUserInfo(): { id?: number; nickname?: string; avatarUrl?: string } {
   return wx.getStorageSync('user_info') || {}
 }
 
@@ -80,6 +80,35 @@ export function login(): Promise<void> {
           .catch(reject)
       },
       fail: reject,
+    })
+  })
+}
+
+export function uploadFile(filePath: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    wx.uploadFile({
+      url: `${BASE_URL}/upload/image`,
+      filePath: filePath,
+      name: 'file',
+      header: {
+        'Authorization': `Bearer ${getToken()}`,
+      },
+      success: (res) => {
+        if (res.statusCode === 201 || res.statusCode === 200) {
+          try {
+            const data = JSON.parse(res.data)
+            resolve(data.url)
+          } catch (e) {
+            reject(new Error('解析上传响应失败'))
+          }
+        } else {
+          reject(new Error(`上传失败: ${res.statusCode}`))
+        }
+      },
+      fail: (err) => {
+        console.error('[API] 上传失败', err)
+        reject(err)
+      },
     })
   })
 }

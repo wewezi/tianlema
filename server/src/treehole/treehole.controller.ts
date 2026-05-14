@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Body, Param, UseGuards, BadRequestException } from '@nestjs/common'
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, BadRequestException } from '@nestjs/common'
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger'
 import { TreeholeService } from './treehole.service'
 import { CreateConfessionDto } from './dto/create-confession.dto'
@@ -38,5 +38,13 @@ export class TreeholeController {
       throw new BadRequestException('type 必须是 sympathy 或 deserved')
     }
     return this.treeholeService.vote(id, type, user.id)
+  }
+
+  @Delete(':id')
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
+  @ApiOperation({ summary: '删除自己的发布' })
+  remove(@Param('id') id: string, @CurrentUser() user: User) {
+    return this.treeholeService.remove(id, user.id)
   }
 }

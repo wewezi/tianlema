@@ -1,3 +1,4 @@
+import { uploadFile } from '../../utils/api'
 import { ICONS } from '../../utils/meta'
 import { addRecord, generateId, getRecords } from '../../utils/store'
 import { formatDate } from '../../utils/util'
@@ -46,8 +47,8 @@ Component({
       wx.vibrateShort({ type: 'light' })
     },
 
-    loadRecentNames() {
-      const records = getRecords()
+    async loadRecentNames() {
+      const records = await getRecords()
       const names = records
         .map(r => r.target.trim())
         .filter(n => !!n)
@@ -160,7 +161,7 @@ Component({
       this.setData({ simpIndex: Math.min(5, Math.max(1, score)) })
     },
 
-    submit() {
+    async submit() {
       const action = (this.data.selectedAction || this.data.customAction).trim()
       if (!action) {
         wx.showToast({ title: '请选择或输入轨迹', icon: 'none' })
@@ -171,25 +172,41 @@ Component({
         return
       }
 
-      const record: SimpRecord = {
-        id: generateId(),
-        action,
-        target: this.data.target.trim(),
-        amount: Math.round((parseFloat(this.data.amount) || 0) * 100) / 100,
-        simpIndex: this.data.simpIndex,
-        date: formatDate(new Date()),
-        note: this.data.note.trim(),
-        type: this.data.formType,
-        images: this.data.images,
-      }
+      wx.showLoading({ title: '记录中...', mask: true })
 
-      addRecord(record)
-      wx.vibrateShort({ type: 'medium' })
-      
-      wx.showToast({ title: '已镌刻', icon: 'success' })
-      setTimeout(() => {
-        wx.navigateBack()
-      }, 1000)
+      try {
+        const imageUrls = []
+        if (this.data.images.length > 0) {
+          const uploadPromises = this.data.images.map(path => uploadFile(path))
+          const results = await Promise.all(uploadPromises)
+          imageUrls.push(...results)
+        }
+
+        const record: SimpRecord = {
+          id: generateId(),
+          action,
+          target: this.data.target.trim(),
+          amount: Math.round((parseFloat(this.data.amount) || 0) * 100) / 100,
+          simpIndex: this.data.simpIndex,
+          date: formatDate(new Date()),
+          note: this.data.note.trim(),
+          type: this.data.formType,
+          images: imageUrls,
+        }
+
+        addRecord(record)
+        wx.vibrateShort({ type: 'medium' })
+        
+        wx.hideLoading()
+        wx.showToast({ title: '已镌刻', icon: 'success' })
+        setTimeout(() => {
+          wx.navigateBack()
+        }, 1000)
+      } catch (err) {
+        wx.hideLoading()
+        wx.showToast({ title: '上传失败', icon: 'none' })
+        console.error('提交失败', err)
+      }
     }
   }
 })

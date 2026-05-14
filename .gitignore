@@ -22,3 +22,6 @@ npm-debug.log*
 
 # Build
 *.js.map
+
+# Uploads
+server/uploads/

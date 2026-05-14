@@ -1,4 +1,4 @@
-import { request, isLoggedIn } from '../../utils/api'
+import { request, isLoggedIn, BASE_URL, uploadFile, getUserInfo } from '../../utils/api'
 import { formatScore } from '../../utils/rank'
 
 interface Quote {
@@ -70,6 +70,7 @@ Component({
     loading: true,
     currentTab: 'feed',
     postImages: [] as string[],
+    currentUserId: 0 as number,
   },
   pageLifetimes: {
     show() {
@@ -92,7 +93,13 @@ Component({
       const start = new Date(new Date().getFullYear(), 0, 0).getTime()
       const dayOfYear = Math.floor((Date.now() - start) / 86400000)
       const dailyQuote = QUOTES[dayOfYear % QUOTES.length]
-      this.setData({ dailyQuote, loading: true })
+      
+      const userInfo = getUserInfo()
+      this.setData({ 
+        dailyQuote, 
+        loading: true,
+        currentUserId: userInfo.id || 0
+      })
 
       Promise.all([this.loadConfessions(), this.loadRanking()])
         .then(() => this.setData({ loading: false }))
@@ -106,13 +113,14 @@ Component({
           var confessions = list.map(function(item: any) {
             return {
               id: item.id,
+              userId: item.userId,
               content: item.content,
               sympathy: item.sympathy || 0,
               deserved: item.deserved || 0,
               timeAgo: formatTime(item.createdAt),
               nickname: (item.user && item.user.nickname) || '深情网友',
-              avatar: (item.user && item.user.avatar) || '',
-              images: item.images || [],
+              avatar: (item.user && item.user.avatar && item.user.avatar.startsWith('/') ? BASE_URL + item.user.avatar : item.user.avatar) || '',
+              images: (item.images || []).map((img: string) => img.startsWith('/') ? BASE_URL + img : img),
             }
           })
           self.setData({ confessions: confessions, confessionsPreview: confessions.slice(0, 3) })
@@ -126,7 +134,7 @@ Component({
           const ranking: DisplayRankUser[] = rawRanking.map((r, i) => ({
             rank: r.rank,
             name: r.isYou ? '你' : r.nickname,
-            avatar: r.isYou ? '' : r.avatar,
+            avatar: r.isYou ? '' : (r.avatar && r.avatar.startsWith('/') ? BASE_URL + r.avatar : r.avatar),
             title: r.title,
             score: r.score,
             scoreDisplay: formatScore(r.score),
@@ -204,9 +212,9 @@ Component({
       })
     },
 
-    submitPost() {
-      var self = this as any
-      var content = self.data.postInput.trim()
+    async submitPost() {
+      const self = this as any
+      const content = self.data.postInput.trim()
       if (content.length < 5) {
         wx.showToast({ title: '至少写5个字哦', icon: 'none' })
         return
@@ -215,22 +223,60 @@ Component({
         wx.showToast({ title: '请先登录', icon: 'none' })
         return
       }
-      request({ 
-        url: '/treehole', 
-        method: 'POST', 
-        data: { 
-          content: content,
-          images: self.data.postImages 
-        } 
+
+      wx.showLoading({ title: '发布中...', mask: true })
+
+      try {
+        // 1. 上传图片（如果有）
+        const imageUrls: string[] = []
+        if (self.data.postImages.length > 0) {
+          const uploadPromises = self.data.postImages.map((path: string) => uploadFile(path))
+          const results = await Promise.all(uploadPromises)
+          imageUrls.push(...(results as string[]))
+        }
+
+        // 2. 提交数据
+        await request({
+          url: '/treehole',
+          method: 'POST',
+          data: {
+            content: content,
+            images: imageUrls
+          }
+        })
+
+        wx.hideLoading()
+        wx.showToast({ title: '发布成功', icon: 'success' })
+        self.setData({ showPostForm: false, postInput: '', postImages: [] })
+        self.loadConfessions()
+      } catch (err) {
+        wx.hideLoading()
+        console.error('发布失败', err)
+        wx.showToast({ title: '发布失败', icon: 'none' })
+      }
+    },
+
+    async deletePost(e: any) {
+      const id = e.currentTarget.dataset.id
+      wx.showModal({
+        title: '确认删除',
+        content: '真的要删除这条树洞吗？',
+        confirmColor: '#ef4444',
+        success: async (res) => {
+          if (res.confirm) {
+            try {
+              wx.showLoading({ title: '删除中...' })
+              await request({ url: `/treehole/${id}`, method: 'DELETE' })
+              wx.hideLoading()
+              wx.showToast({ title: '已删除' })
+              this.loadConfessions()
+            } catch (err) {
+              wx.hideLoading()
+              wx.showToast({ title: '删除失败', icon: 'none' })
+            }
+          }
+        }
       })
-        .then(function() {
-          wx.showToast({ title: '发布成功', icon: 'none' })
-          self.setData({ showPostForm: false })
-          self.loadConfessions()
-        })
-        .catch(function() {
-          wx.showToast({ title: '发布失败', icon: 'none' })
-        })
     },
 
     voteSympathy(e: any) {

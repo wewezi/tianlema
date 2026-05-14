@@ -21,10 +21,6 @@
   <!-- Feed Tab -->
   <view wx:if="{{currentTab === 'feed'}}">
     <view class="feed-section" wx:if="{{!loading}}">
-      <view class="feed-header">
-        <text class="feed-title">深情树洞</text>
-        <text class="feed-subtitle" bindtap="goTreeholePage">查看全部 ></text>
-      </view>
 
       <view class="feed-list">
         <view class="post-card" wx:for="{{confessionsPreview}}" wx:key="id">
@@ -36,7 +32,10 @@
               </view>
               <text class="post-user">{{item.nickname}}</text>
             </view>
-            <text class="post-time">{{item.timeAgo}}</text>
+            <view class="post-top-right">
+              <text class="post-time">{{item.timeAgo}}</text>
+              <text wx:if="{{item.userId === currentUserId}}" class="post-delete" bindtap="deletePost" data-id="{{item.id}}">删除</text>
+            </view>
           </view>
           <text class="post-content">{{item.content}}</text>
           
@@ -69,10 +68,6 @@
   <!-- Ranking Tab -->
   <view wx:if="{{currentTab === 'ranking'}}">
     <view class="rank-card" wx:if="{{!loading}}">
-      <view class="rc-header">
-        <text class="rc-title">付出排行榜</text>
-        <text class="rc-more">实时更新</text>
-      </view>
       <view class="rc-list">
         <view class="rc-item {{item.isYou ? 'you' : ''}}" wx:for="{{ranking}}" wx:key="name">
           <view class="rc-left">
