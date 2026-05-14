@@ -1,4 +1,4 @@
-import { IsString, MinLength, MaxLength } from 'class-validator'
+import { IsString, MinLength, MaxLength, IsOptional, IsArray } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 
 export class CreateConfessionDto {
@@ -9,5 +9,8 @@ export class CreateConfessionDto {
   content: string
 
   @ApiProperty({ description: '图片列表', required: false })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
   images?: string[]
 }
