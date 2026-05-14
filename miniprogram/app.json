@@ -2,6 +2,7 @@
   "pages": [
     "pages/index/index",
     "pages/records/records",
+    "pages/record-add/record-add",
     "pages/community/community",
     "pages/stats/stats",
     "pages/quiz/quiz",
@@ -10,7 +11,7 @@
   ],
   "window": {
     "navigationBarTextStyle": "black",
-    "navigationBarTitleText": "舔了吗",
+    "navigationBarTitleText": "深情时刻",
     "navigationBarBackgroundColor": "#ffffff"
   },
   "tabBar": {

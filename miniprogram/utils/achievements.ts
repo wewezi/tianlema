@@ -61,22 +61,22 @@ export const ACHIEVEMENTS: Achievement[] = [
   {
     id: 'spend_5000',
     icon: '🏦',
-    title: '倾家荡产',
-    desc: '累计花费超过 5000 元',
+    title: '倾心而为',
+    desc: '累计付出超过 5000 元',
     check: (r) => r.reduce((s, x) => s + x.amount, 0) >= 5000,
   },
   {
     id: 'multi_target_3',
     icon: '🎭',
-    title: '广撒网',
-    desc: '对 3 个不同的人付出过',
+    title: '多元守护',
+    desc: '对 3 个不同的人表达过在意',
     check: (r) => new Set(r.map(x => x.target)).size >= 3,
   },
   {
     id: 'multi_target_5',
     icon: '🌟',
-    title: '博爱之心',
-    desc: '对 5 个不同的人付出过',
+    title: '博爱之光',
+    desc: '对 5 个不同的人表达过在意',
     check: (r) => new Set(r.map(x => x.target)).size >= 5,
   },
   {

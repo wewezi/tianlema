@@ -7,4 +7,7 @@ export class CreateConfessionDto {
   @MinLength(5, { message: '内容至少5个字' })
   @MaxLength(500, { message: '内容最多500字' })
   content: string
+
+  @ApiProperty({ description: '图片列表', required: false })
+  images?: string[]
 }

@@ -11,7 +11,7 @@ const RANK_TITLES: { score: number; title: string; icon: string }[] = [
   { score: 1000, title: '资深舔狗', icon: '🐩' },
   { score: 3000, title: '舔界精英', icon: '🦮' },
   { score: 8000, title: '舔中之王', icon: '🐕‍🦺' },
-  { score: 25000, title: '舔了么终身会员', icon: '👑' },
+  { score: 25000, title: '舔了吗终身会员', icon: '👑' },
 ]
 
 function getRankTitle(score: number): string {

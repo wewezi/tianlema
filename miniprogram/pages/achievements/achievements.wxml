@@ -1,15 +1,17 @@
-<view class="page">
-  <view class="header">
-    <text class="h-title">成就墙</text>
-    <text class="h-sub">已解锁 {{unlockedCount}} / {{totalCount}}</text>
+<view class="demumu-page">
+  <view class="d-header">
+    <text class="d-title">成就档案</text>
+    <text class="d-sub">已解锁 {{unlockedCount}} / {{totalCount}}</text>
   </view>
 
-  <view class="body">
-    <view class="ach-grid">
-      <view class="ach-item {{item.unlocked ? '' : 'locked'}}" wx:for="{{achievements}}" wx:key="title">
-        <text class="ach-icon">{{item.icon}}</text>
-        <text class="ach-title">{{item.title}}</text>
-        <text class="ach-desc">{{item.desc}}</text>
+  <view class="d-body card-block">
+    <view class="d-ach-list">
+      <view class="d-ach-item {{item.unlocked ? '' : 'locked'}}" wx:for="{{achievements}}" wx:key="title">
+        <view class="d-ach-main">
+          <text class="d-ach-title">{{item.title}}</text>
+          <text class="d-ach-desc">{{item.desc}}</text>
+        </view>
+        <text class="d-ach-status">{{item.unlocked ? '已达成' : '未解锁'}}</text>
       </view>
     </view>
   </view>

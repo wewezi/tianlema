@@ -1,0 +1,216 @@
+.add-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  padding: 40rpx 30rpx;
+  box-sizing: border-box;
+}
+
+.add-container {
+  max-width: 1000rpx;
+  margin: 0 auto;
+}
+
+/* Form Type Selector */
+.form-type-selector {
+  display: flex;
+  background: #f1f5f9;
+  padding: 10rpx;
+  border-radius: 24rpx;
+  margin-bottom: 40rpx;
+}
+.type-tab {
+  flex: 1;
+  text-align: center;
+  padding: 20rpx 0;
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #64748b;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 18rpx;
+}
+.type-tab.active {
+  background: #ffffff;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+}
+.type-tab.active.out { color: #ff4d6a; }
+.type-tab.active.in { color: #10b981; }
+.type-tab.active.none { color: #8b5cf6; }
+
+.add-card {
+  background: #ffffff;
+  border-radius: 40rpx;
+  padding: 40rpx;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.03);
+  margin-bottom: 60rpx;
+}
+
+.field {
+  margin-bottom: 40rpx;
+}
+.field:last-child { margin-bottom: 0; }
+
+.label {
+  display: block;
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #94a3b8;
+  margin-bottom: 20rpx;
+  letter-spacing: 1rpx;
+}
+
+.premium-ipt {
+  width: 100%;
+  height: 90rpx;
+  background: #f8fafc;
+  border-radius: 20rpx;
+  padding: 0 30rpx;
+  box-sizing: border-box;
+  font-size: 30rpx;
+  color: #1e293b;
+  font-weight: 500;
+}
+
+/* Tag Token Styles */
+.tag-token.custom {
+  border-style: dashed;
+  background: transparent;
+  color: #94a3b8;
+}
+.tag-token.custom.active {
+  border-style: solid;
+  background: var(--c-pri, #ff4d6a);
+  color: #fff;
+}
+
+/* Recent Names */
+.recent-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  margin-top: 16rpx;
+}
+.name-tag {
+  font-size: 24rpx;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 8rpx 24rpx;
+  border-radius: 100rpx;
+  border: 1rpx solid #e2e8f0;
+}
+.name-tag:active {
+  background: #e2e8f0;
+  transform: scale(0.95);
+}
+
+.tags-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-bottom: 10rpx;
+}
+.tag-token {
+  padding: 14rpx 32rpx;
+  background: #f1f5f9;
+  color: #64748b;
+  font-size: 24rpx;
+  font-weight: 600;
+  border-radius: 100rpx;
+  transition: all 0.2s ease;
+}
+.tag-token.active {
+  color: #ffffff;
+  transform: translateY(-2rpx);
+}
+.tags-cloud.out .tag-token.active { background: #ff4d6a; box-shadow: 0 8rpx 20rpx rgba(255,77,106,0.3); }
+.tags-cloud.in .tag-token.active { background: #10b981; box-shadow: 0 8rpx 20rpx rgba(16,185,129,0.3); }
+.tags-cloud.none .tag-token.active { background: #8b5cf6; box-shadow: 0 8rpx 20rpx rgba(139,92,246,0.3); }
+
+.heart-rating {
+  display: flex;
+  gap: 20rpx;
+}
+.star-box {
+  padding: 10rpx;
+  transition: transform 0.2s ease;
+}
+.star-box:active { transform: scale(0.9); }
+
+.premium-txa {
+  width: 100%;
+  height: 200rpx;
+  background: #f8fafc;
+  border-radius: 24rpx;
+  padding: 30rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  line-height: 1.6;
+  color: #1e293b;
+}
+
+/* Image Grid */
+.image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+}
+.image-item {
+  position: relative;
+  width: calc((100% - 40rpx) / 3);
+  height: 180rpx;
+  border-radius: 20rpx;
+  overflow: hidden;
+}
+.preview-img {
+  width: 100%;
+  height: 100%;
+}
+.img-delete {
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+  background: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image-add {
+  width: calc((100% - 40rpx) / 3);
+  height: 180rpx;
+  background: #f8fafc;
+  border-radius: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx dashed #cbd5e1;
+}
+
+.btn-submit-wrap {
+  padding: 0 40rpx;
+}
+.btn-submit-premium {
+  width: 100% !important;
+  height: 110rpx;
+  background: linear-gradient(135deg, #ff4d6a 0%, #ff758c 100%);
+  color: #ffffff;
+  border-radius: 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  font-weight: 700;
+  letter-spacing: 4rpx;
+  box-shadow: 0 10rpx 30rpx rgba(255, 77, 106, 0.3);
+}
+
+/* Animations */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  opacity: 0;
+  animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}

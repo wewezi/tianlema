@@ -1,12 +1,14 @@
 import { getRecords, addRecord, deleteRecord, generateId } from '../../utils/store'
-import { getActionMeta } from '../../utils/meta'
+import { getActionMeta, ICONS } from '../../utils/meta'
 import { formatDate } from '../../utils/util'
 import { getTodayChallenge, isChallengeCompleted, completeChallenge, getChallengeStreak } from '../../utils/challenge'
 import type { SimpRecord } from '../../app'
 
-const ACTIONS = ['请吃饭', '送礼物', '发红包', '陪聊天', '帮忙干活']
-const NO_MONEY_ACTIONS = ['陪聊天', '帮忙干活']
-const SIMP_LABELS = ['略微舔', '一般舔', '认真舔', '疯狂舔', '舔到极致']
+const ACTIONS_OUT = ['请吃饭', '送礼物', '发红包', '买东西', '转账']
+const ACTIONS_IN = ['对方请客', '收到礼物', '收到红包', '对方回礼', '对方主动']
+const ACTIONS_NONE = ['陪聊天', '帮忙干活', '偷看主页', '换了头像', '梦见对方']
+const NO_MONEY_ACTIONS = ['陪聊天', '帮忙干活', '对方安慰', '对方帮忙']
+const SIMP_LABELS = ['略有心动', '情之所至', '深陷其中', '无可救药', '至死不渝']
 const DAY_NAMES = ['日', '一', '二', '三', '四', '五', '六']
 
 Component({
@@ -14,7 +16,7 @@ Component({
     greeting: '',
     dateText: '',
     showForm: false,
-    actions: ACTIONS,
+    actions: ACTIONS_OUT,
     simpLabels: SIMP_LABELS,
     selectedAction: '',
     customAction: '',
@@ -22,6 +24,7 @@ Component({
     amount: '',
     simpIndex: 1,
     hasAmount: true,
+    showAmountField: true,
     note: '',
     weekDays: [] as { date: string; label: string; count: number; barH: number; isToday: boolean }[],
     weekRecords: [] as (SimpRecord & { dateLabel: string; simpLabel: string; icon: string; color: string })[],
@@ -101,13 +104,18 @@ Component({
       const weekRecords = all
         .filter(r => weekDates.indexOf(r.date) !== -1)
         .map(r => {
-          const meta = getActionMeta(r.action)
+          const effectiveType = r.type || (r.amount > 0 ? 'out' : 'none')
+          let icon = ICONS.DAILY
+          let color = '#8b5cf6'
+          if (effectiveType === 'out') { icon = ICONS.EXPENSE; color = '#ff4d6a' }
+          else if (effectiveType === 'in') { icon = ICONS.INCOME; color = '#10b981' }
+
           return {
             ...r,
             dateLabel: r.date === todayStr ? '今天' : r.date.slice(5),
             simpLabel: SIMP_LABELS[r.simpIndex - 1],
-            icon: meta.icon,
-            color: meta.color,
+            icon,
+            color,
           }
         })
 
@@ -117,163 +125,24 @@ Component({
       this.setData({ weekDays, weekRecords, weekTotal, weekAmount })
     },
 
-    doneChallenge() {
-      if (this.data.challengeDone) return
-      var bonus = completeChallenge()
+    toggleChallenge() {
+      if (this.data.challengeDone) {
+        wx.showToast({ title: '今日任务已完成啦', icon: 'none' })
+        return
+      }
+      wx.vibrateShort({ type: 'medium' })
+      const bonus = completeChallenge()
       this.setData({ challengeDone: true, challengeStreak: getChallengeStreak() })
-      wx.showToast({ title: '+' + bonus + ' 分！', icon: 'none' })
+      wx.showLoading({ title: '打卡中...', mask: true })
+      setTimeout(() => {
+        wx.hideLoading()
+        wx.showToast({ title: '深情值 +' + bonus, icon: 'none' })
+      }, 500)
     },
 
     openForm() {
-      this.setData({ showForm: true })
-    },
-
-    closeForm() {
-      this.setData({ showForm: false })
-    },
-
-    pickAction(e: any) {
-      const action = e.currentTarget.dataset.v
-      const hasAmount = NO_MONEY_ACTIONS.indexOf(action) === -1
-      this.setData({
-        selectedAction: action,
-        customAction: '',
-        hasAmount,
-        amount: hasAmount ? this.data.amount : '',
-      })
-      this.updateSimpIndex()
-    },
-
-    onCustomAction(e: any) {
-      this.setData({
-        customAction: e.detail.value,
-        selectedAction: '',
-        hasAmount: true,
-      })
-      this.updateSimpIndex()
-    },
-
-    onTarget(e: any) {
-      this.setData({ target: e.detail.value })
-    },
-
-    onAmount(e: any) {
-      this.setData({ amount: e.detail.value })
-      this.updateSimpIndex()
-    },
-
-    updateSimpIndex() {
-      const action = (this.data.selectedAction || this.data.customAction).trim()
-      const amount = parseFloat(this.data.amount) || 0
-
-      const actionBase: Record<string, number> = {
-        '陪聊天': 1,
-        '帮忙干活': 1,
-        '请吃饭': 2,
-        '送礼物': 3,
-        '发红包': 3,
-      }
-      let score = action in actionBase ? actionBase[action] : (action ? 2 : 1)
-
-      if (amount >= 1000) score += 3
-      else if (amount >= 200) score += 2
-      else if (amount >= 50) score += 1
-
-      this.setData({ simpIndex: Math.min(5, Math.max(1, score)) })
-    },
-
-    pickStar(e: any) {
       wx.vibrateShort({ type: 'light' })
-      this.setData({ simpIndex: e.currentTarget.dataset.v })
-    },
-
-    onNote(e: any) {
-      this.setData({ note: e.detail.value })
-    },
-
-    onSwipeStart(e: any) {
-      const touch = e.touches[0]
-      ;(this as any)._swipe = { startX: touch.clientX, startY: touch.clientY, idx: e.currentTarget.dataset.idx, moved: false }
-    },
-
-    onSwipeMove(e: any) {
-      const s = (this as any)._swipe
-      if (!s) return
-      const touch = e.touches[0]
-      const dx = touch.clientX - s.startX
-      const dy = touch.clientY - s.startY
-      if (!s.moved && Math.abs(dy) > Math.abs(dx)) { (this as any)._swipe = null; return }
-      s.moved = true
-      const x = Math.max(-65, Math.min(0, dx))
-      this.setData({ [`weekRecords[${s.idx}].swipeX`]: x })
-    },
-
-    onSwipeEnd(_e: any) {
-      const s = (this as any)._swipe
-      if (!s) return
-      const cur = (this.data.weekRecords[s.idx] as any).swipeX || 0
-      this.setData({ [`weekRecords[${s.idx}].swipeX`]: cur < -30 ? -65 : 0 })
-      ;(this as any)._swipe = null
-    },
-
-    deleteWeekRecord(e: any) {
-      const id = e.currentTarget.dataset.id
-      wx.showModal({
-        title: '确认删除',
-        content: '真的要删掉这条记录吗？',
-        confirmColor: '#ef4444',
-        success: (res) => {
-          if (res.confirm) {
-            wx.vibrateShort({ type: 'medium' })
-            deleteRecord(id)
-            wx.showToast({ title: '已删除', icon: 'none' })
-            this.refresh()
-          } else {
-            // 取消时收回滑动
-            const idx = this.data.weekRecords.findIndex((r: any) => r.id === id)
-            if (idx >= 0) this.setData({ [`weekRecords[${idx}].swipeX`]: 0 })
-          }
-        },
-      })
-    },
-
-    submit() {
-      const action = (this.data.selectedAction || this.data.customAction).trim()
-      if (!action) {
-        wx.showToast({ title: '请选择或输入行为', icon: 'none' })
-        return
-      }
-      if (!this.data.target.trim()) {
-        wx.showToast({ title: '请输入对象', icon: 'none' })
-        return
-      }
-
-      const record: SimpRecord = {
-        id: generateId(),
-        action,
-        target: this.data.target.trim(),
-        amount: Math.round((parseFloat(this.data.amount) || 0) * 100) / 100,
-        simpIndex: this.data.simpIndex,
-        date: formatDate(new Date()),
-        note: this.data.note.trim(),
-      }
-
-      addRecord(record)
-      wx.vibrateShort({ type: 'medium' })
-      wx.showToast({ title: '记录成功', icon: 'none' })
-
-      this.setData({
-        showForm: false,
-        selectedAction: '',
-        customAction: '',
-        target: '',
-        amount: '',
-        simpIndex: 1,
-        hasAmount: true,
-        note: '',
-      })
-
-      this.refresh()
+      wx.navigateTo({ url: '/pages/record-add/record-add' })
     },
   },
 })

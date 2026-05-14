@@ -1,19 +1,15 @@
-<view class="page">
-  <view class="header">
-    <text class="h-title">🏆 付出排行榜</text>
-    <text class="h-sub">你 · 第 {{yourRank}} 名 · {{yourScore}} 分</text>
+<view class="demumu-page">
+  <view class="d-header">
+    <text class="d-title">排行榜</text>
+    <text class="d-sub">你 · 第 {{yourRank}} 名 · {{yourScore}} 分</text>
   </view>
 
-  <view class="body">
-    <view class="rank-list">
-      <view class="rank-row {{item.isYou ? 'you' : ''}}" wx:for="{{ranking}}" wx:key="rank">
-        <text class="rank-pos {{item.posClass}}">{{item.rank}}</text>
-        <view class="rank-avatar">{{item.avatar}}</view>
-        <view class="rank-info">
-          <text class="rank-name">{{item.name}}</text>
-          <text class="rank-title">{{item.title}}</text>
-        </view>
-        <text class="rank-score">{{item.scoreDisplay}}</text>
+  <view class="d-body card-block">
+    <view class="d-rank-list">
+      <view class="d-rank-item {{item.isYou ? 'you' : ''}}" wx:for="{{ranking}}" wx:key="rank">
+        <text class="d-rank-pos">{{item.rank}}</text>
+        <text class="d-rank-name">{{item.name}}</text>
+        <text class="d-rank-score">{{item.scoreDisplay}}</text>
       </view>
     </view>
   </view>

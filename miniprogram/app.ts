@@ -9,6 +9,8 @@ export interface SimpRecord {
   simpIndex: number
   date: string
   note: string
+  type?: 'in' | 'out' | 'none'
+  images?: string[]
 }
 
 App<IAppOption>({

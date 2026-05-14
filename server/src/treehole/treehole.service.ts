@@ -18,6 +18,7 @@ export class TreeholeService {
   async create(dto: CreateConfessionDto, userId?: number): Promise<Confession> {
     const confession = this.confessionRepo.create({
       content: dto.content,
+      images: dto.images || [],
       userId: userId || null,
     })
     return this.confessionRepo.save(confession)
@@ -26,6 +27,7 @@ export class TreeholeService {
   async findAll(): Promise<Confession[]> {
     return this.confessionRepo.find({
       order: { createdAt: 'DESC' },
+      relations: ['user'],
       take: 50,
     })
   }

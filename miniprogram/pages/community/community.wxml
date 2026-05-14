@@ -1,110 +1,110 @@
-<view class="page">
-  <!-- Header -->
-  <view class="header">
-    <text class="h-title">真心社区</text>
-    <text class="h-sub">与万千同好共勉</text>
+<view class="premium-page">
+  <view class="quote-banner" bindtap="copyDaily">
+    <view class="qb-content">
+      <text class="qb-title">每日深情</text>
+      <text class="qb-text">{{dailyQuote.text}}</text>
+      <text class="qb-author">— {{dailyQuote.author}}</text>
+    </view>
+    <view class="qb-decoration">
+      <view class="circle c1"></view>
+      <view class="circle c2"></view>
+    </view>
+  </view>
+ 
+  <view class="comm-tabs-wrapper">
+    <view class="comm-tabs">
+      <view class="c-tab {{currentTab === 'feed' ? 'active' : ''}}" bindtap="switchTab" data-tab="feed">深情树洞</view>
+      <view class="c-tab {{currentTab === 'ranking' ? 'active' : ''}}" bindtap="switchTab" data-tab="ranking">付出排行</view>
+    </view>
   </view>
 
-  <view class="body">
-    <!-- Daily Quote -->
-    <view class="daily-card" bindtap="copyDaily">
-      <view class="daily-label">今日箴言</view>
-      <text class="daily-text">"{{dailyQuote.text}}"</text>
-      <text class="daily-author">— {{dailyQuote.author}}</text>
-    </view>
+  <!-- Feed Tab -->
+  <view wx:if="{{currentTab === 'feed'}}">
+    <view class="feed-section" wx:if="{{!loading}}">
+      <view class="feed-header">
+        <text class="feed-title">深情树洞</text>
+        <text class="feed-subtitle" bindtap="goTreeholePage">查看全部 ></text>
+      </view>
 
-    <!-- Loading Skeleton -->
-    <view wx:if="{{loading}}" class="skeleton-wrap">
-      <view class="skeleton-card">
-        <view class="skeleton-line w60"></view>
-        <view class="skeleton-line w80"></view>
-        <view class="skeleton-line w40"></view>
-      </view>
-      <view class="skeleton-card">
-        <view class="skeleton-line w50"></view>
-        <view class="skeleton-line w90"></view>
-      </view>
-    </view>
-
-    <!-- Leaderboard -->
-    <view class="sec" wx:if="{{!loading}}">
-      <view class="rank-head">
-        <text class="sec-title">🏆 付出排行榜</text>
-        <text class="rank-mine">你 · 第 {{yourRank}} 名 · {{yourScore}} 分</text>
-      </view>
-      <view class="rank-list">
-        <view class="rank-row {{item.isYou ? 'you' : ''}}" wx:for="{{rankingTop3}}" wx:key="name">
-          <text class="rank-pos {{item.posClass}}">{{item.rank}}</text>
-          <view class="rank-avatar">{{item.avatar}}</view>
-          <view class="rank-info">
-            <text class="rank-name">{{item.name}}</text>
-            <text class="rank-title">{{item.title}}</text>
-          </view>
-          <text class="rank-score">{{item.scoreDisplay}}</text>
-        </view>
-      </view>
-      <view class="rank-more" bindtap="goRankingPage">
-        <text>查看完整排行榜 ›</text>
-      </view>
-    </view>
-
-    <!-- Tree Hole Preview -->
-    <view class="sec" wx:if="{{!loading}}">
-      <view class="rank-head">
-        <text class="sec-title">🌳 匿名树洞</text>
-        <text class="rank-mine">{{confessions.length}} 条倾诉</text>
-      </view>
-      <view wx:if="{{confessions.length === 0}}" class="th-empty">
-        <text class="th-empty-text">还没有人倾诉，来说点什么吧</text>
-      </view>
-      <view class="posts">
-        <view class="post" wx:for="{{confessionsPreview}}" wx:key="id">
-          <view class="post-head">
-            <view class="post-avatar">🕳️</view>
-            <view class="post-info">
-              <text class="post-user">匿名舔友</text>
-              <text class="post-time">{{item.timeAgo}}</text>
+      <view class="feed-list">
+        <view class="post-card" wx:for="{{confessionsPreview}}" wx:key="id">
+          <view class="post-top">
+            <view class="post-user-info">
+              <view class="post-avatar">
+                <image wx:if="{{item.avatar}}" src="{{item.avatar}}" mode="aspectFill" />
+                <view wx:else class="post-avatar-placeholder">{{item.nickname[0]}}</view>
+              </view>
+              <text class="post-user">{{item.nickname}}</text>
             </view>
+            <text class="post-time">{{item.timeAgo}}</text>
           </view>
           <text class="post-content">{{item.content}}</text>
-          <view class="post-foot">
-            <view class="vote-btn" data-id="{{item.id}}" bindtap="voteSympathy">
-              <text>😢 心疼 {{item.sympathy}}</text>
+          
+          <view class="post-images" wx:if="{{item.images && item.images.length > 0}}">
+            <image 
+              class="post-img {{item.images.length === 1 ? 'large' : ''}}" 
+              wx:for="{{item.images}}" 
+              wx:for-item="img" 
+              wx:key="*this" 
+              src="{{img}}" 
+              mode="aspectFill" 
+              bindtap="previewFeedImage" 
+              data-src="{{img}}" 
+              data-urls="{{item.images}}"
+            />
+          </view>
+          <view class="post-actions">
+            <view class="post-btn" data-id="{{item.id}}" bindtap="voteSympathy">
+              <text>感同身受</text><text class="btn-num">{{item.sympathy}}</text>
             </view>
-            <view class="vote-btn deserve" data-id="{{item.id}}" bindtap="voteDeserved">
-              <text>😏 活该 {{item.deserved}}</text>
+            <view class="post-btn bad" data-id="{{item.id}}" bindtap="voteDeserved">
+              <text>祝你幸福</text><text class="btn-num">{{item.deserved}}</text>
             </view>
           </view>
         </view>
       </view>
-      <view class="rank-more" bindtap="goTreeholePage" wx:if="{{confessions.length > 3}}">
-        <text>查看全部树洞 ›</text>
+    </view>
+  </view>
+
+  <!-- Ranking Tab -->
+  <view wx:if="{{currentTab === 'ranking'}}">
+    <view class="rank-card" wx:if="{{!loading}}">
+      <view class="rc-header">
+        <text class="rc-title">付出排行榜</text>
+        <text class="rc-more">实时更新</text>
+      </view>
+      <view class="rc-list">
+        <view class="rc-item {{item.isYou ? 'you' : ''}}" wx:for="{{ranking}}" wx:key="name">
+          <view class="rc-left">
+            <text class="rc-pos">{{item.rank < 10 ? '0' + item.rank : item.rank}}</text>
+            <text class="rc-name">{{item.name}}</text>
+          </view>
+          <text class="rc-score">{{item.scoreDisplay}}分</text>
+        </view>
       </view>
     </view>
-
   </view>
+</view>
 
-  <!-- FAB: New Post -->
-  <view class="fab" bindtap="openPostForm">
-    <text class="fab-icon">✏️</text>
-  </view>
+<view class="fab-btn" bindtap="openPostForm">
+  <text class="fab-icon">+</text>
+</view>
 
-  <!-- Post Form Overlay -->
-  <view wx:if="{{showPostForm}}" class="overlay" bindtap="closePostForm"></view>
-  <view wx:if="{{showPostForm}}" class="sheet">
-    <view class="sheet-bar"></view>
-    <text class="sheet-title">匿名倾诉</text>
-    <textarea
-      class="sheet-textarea"
-      placeholder="说出你的心里话..."
-      value="{{postInput}}"
-      bindinput="onPostInput"
-      maxlength="500"
-      auto-focus
-    />
-    <view class="sheet-count">{{postInput.length}} / 500</view>
-    <view class="sheet-submit" bindtap="submitPost">
-      <text>匿名发布</text>
+<view wx:if="{{showPostForm}}" class="sheet-overlay" bindtap="closePostForm"></view>
+<view wx:if="{{showPostForm}}" class="post-sheet">
+  <view class="sheet-handle"></view>
+  <textarea class="sheet-input" placeholder="写给某人的信..." value="{{postInput}}" bindinput="onPostInput" maxlength="500" auto-focus show-confirm-bar="{{false}}" />
+  
+  <view class="post-image-upload">
+    <view class="p-image-item" wx:for="{{postImages}}" wx:key="*this">
+      <image src="{{item}}" mode="aspectFill" bindtap="previewPostImage" data-src="{{item}}" />
+      <view class="p-image-delete" bindtap="deleteImage" data-idx="{{index}}">×</view>
     </view>
+    <view class="p-image-add" bindtap="chooseImage" wx:if="{{postImages.length < 9}}">+</view>
+  </view>
+
+  <view class="sheet-footer">
+    <text class="sheet-count">{{postInput.length}}/500</text>
+    <view class="sheet-submit" bindtap="submitPost">发布</view>
   </view>
 </view>

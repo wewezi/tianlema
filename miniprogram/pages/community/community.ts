@@ -12,6 +12,8 @@ interface ConfessionItem {
   sympathy: number
   deserved: number
   timeAgo: string
+  nickname: string
+  avatar: string
 }
 
 interface DisplayRankUser {
@@ -66,6 +68,8 @@ Component({
     yourScore: '0',
     yourRank: 0,
     loading: true,
+    currentTab: 'feed',
+    postImages: [] as string[],
   },
   pageLifetimes: {
     show() {
@@ -80,7 +84,10 @@ Component({
       this.loadFeed()
       wx.stopPullDownRefresh()
     },
-
+    switchTab(e: any) {
+      const tab = e.currentTarget.dataset.tab
+      this.setData({ currentTab: tab })
+    },
     loadFeed() {
       const start = new Date(new Date().getFullYear(), 0, 0).getTime()
       const dayOfYear = Math.floor((Date.now() - start) / 86400000)
@@ -103,6 +110,9 @@ Component({
               sympathy: item.sympathy || 0,
               deserved: item.deserved || 0,
               timeAgo: formatTime(item.createdAt),
+              nickname: (item.user && item.user.nickname) || '深情网友',
+              avatar: (item.user && item.user.avatar) || '',
+              images: item.images || [],
             }
           })
           self.setData({ confessions: confessions, confessionsPreview: confessions.slice(0, 3) })
@@ -116,7 +126,7 @@ Component({
           const ranking: DisplayRankUser[] = rawRanking.map((r, i) => ({
             rank: r.rank,
             name: r.isYou ? '你' : r.nickname,
-            avatar: r.isYou ? '🌟' : r.avatar,
+            avatar: r.isYou ? '' : r.avatar,
             title: r.title,
             score: r.score,
             scoreDisplay: formatScore(r.score),
@@ -143,7 +153,7 @@ Component({
     },
 
     openPostForm() {
-      this.setData({ showPostForm: true, postInput: '' })
+      this.setData({ showPostForm: true, postInput: '', postImages: [] })
     },
 
     closePostForm() {
@@ -152,6 +162,46 @@ Component({
 
     onPostInput(e: any) {
       this.setData({ postInput: e.detail.value })
+    },
+
+    chooseImage() {
+      wx.chooseMedia({
+        count: 9 - this.data.postImages.length,
+        mediaType: ['image'],
+        sourceType: ['album', 'camera'],
+        success: (res) => {
+          const newImages = res.tempFiles.map(f => f.tempFilePath)
+          this.setData({
+            postImages: [...this.data.postImages, ...newImages]
+          })
+          wx.vibrateShort({ type: 'light' })
+        }
+      })
+    },
+
+    deleteImage(e: any) {
+      const idx = e.currentTarget.dataset.idx
+      const postImages = [...this.data.postImages]
+      postImages.splice(idx, 1)
+      this.setData({ postImages })
+      wx.vibrateShort({ type: 'light' })
+    },
+
+    previewPostImage(e: any) {
+      const current = e.currentTarget.dataset.src
+      wx.previewImage({
+        current,
+        urls: this.data.postImages
+      })
+    },
+
+    previewFeedImage(e: any) {
+      const current = e.currentTarget.dataset.src
+      const urls = e.currentTarget.dataset.urls
+      wx.previewImage({
+        current,
+        urls
+      })
     },
 
     submitPost() {
@@ -165,7 +215,14 @@ Component({
         wx.showToast({ title: '请先登录', icon: 'none' })
         return
       }
-      request({ url: '/treehole', method: 'POST', data: { content: content } })
+      request({ 
+        url: '/treehole', 
+        method: 'POST', 
+        data: { 
+          content: content,
+          images: self.data.postImages 
+        } 
+      })
         .then(function() {
           wx.showToast({ title: '发布成功', icon: 'none' })
           self.setData({ showPostForm: false })

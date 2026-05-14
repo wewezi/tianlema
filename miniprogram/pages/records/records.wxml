@@ -1,65 +1,72 @@
-<view class="page">
-  <!-- Header -->
-  <view class="header">
-    <text class="h-title">付出历史</text>
-    <text class="h-sub">回首那些卑微的足迹</text>
-    <view class="h-stats" wx:if="{{totalCount > 0}}">
-      <view class="h-stat">
-        <text class="h-num">{{totalAmount}}</text>
-        <text class="h-label">元 · 总花费</text>
-      </view>
-      <view class="h-div"></view>
-      <view class="h-stat">
-        <text class="h-num">{{totalCount}}</text>
-        <text class="h-label">次 · 总记录</text>
+<view class="premium-page">
+  <!-- Hero Card moved to top -->
+  <view class="hero-card">
+    <view class="hero-item">
+      <text class="hero-val">{{totalCount}}</text>
+      <text class="hero-lbl">守护次数</text>
+    </view>
+    <view class="hero-divider"></view>
+    <view class="hero-item">
+      <text class="hero-val">¥{{totalAmount}}</text>
+      <text class="hero-lbl">累计付出</text>
+    </view>
+  </view>
+
+  <!-- Top Filter Tabs -->
+  <view class="filter-wrapper">
+    <view class="filter-tabs">
+      <view class="f-tab {{currentTab === 'week' ? 'active' : ''}}" bindtap="switchTab" data-tab="week">周</view>
+      <view class="f-tab {{currentTab === 'month' ? 'active' : ''}}" bindtap="switchTab" data-tab="month">月</view>
+      <view class="f-tab {{currentTab === 'all' ? 'active' : ''}}" bindtap="switchTab" data-tab="all">全部</view>
+    </view>
+  </view>
+
+  <!-- Horizontal Week Calendar -->
+  <view class="calendar-strip" wx:if="{{currentTab === 'week'}}">
+    <view class="cal-item {{item.isToday ? 'is-today' : ''}} {{item.isSelected ? 'active' : ''}}" wx:for="{{weekDays}}" wx:key="fullDate" bindtap="selectDay" data-date="{{item.fullDate}}">
+      <text class="cal-w">{{item.name}}</text>
+      <text class="cal-d">{{item.day}}</text>
+      <view class="cal-dot" wx:if="{{item.hasRecord}}"></view>
+    </view>
+  </view>
+
+  <!-- Monthly Calendar -->
+  <view class="calendar-month" wx:if="{{currentTab === 'month'}}">
+    <view class="cm-header">
+      <text class="cm-month-title">{{monthTitle}}</text>
+    </view>
+    <view class="cm-weekdays">
+      <text wx:for="{{['一','二','三','四','五','六','日']}}" wx:key="*this">{{item}}</text>
+    </view>
+    <view class="cm-days">
+      <view class="cm-day empty" wx:for="{{emptyDays}}" wx:key="*this"></view>
+      <view class="cm-day {{item.isToday ? 'is-today' : ''}} {{item.isSelected ? 'active' : ''}}" wx:for="{{monthDays}}" wx:key="fullDate" bindtap="selectDay" data-date="{{item.fullDate}}">
+        <text>{{item.day}}</text>
+        <view class="cm-dot" wx:if="{{item.hasRecord}}"></view>
       </view>
     </view>
   </view>
 
-  <!-- Body -->
-  <view class="body">
-    <view wx:if="{{totalCount === 0}}" class="empty">
-      <text class="empty-icon">🦴</text>
-      <text class="empty-text">两袖清风，还没开始记录</text>
-    </view>
+  <view wx:if="{{totalCount === 0}}" class="empty-state">
+    <text class="empty-text">暂时还没有记录哦</text>
+  </view>
 
-    <view wx:else>
-      <view class="group" wx:for="{{groups}}" wx:key="label" wx:for-item="group">
-        <view class="group-head">
-          <text class="group-label">{{group.label}}</text>
-          <text class="group-count">{{group.records.length}} 条</text>
-        </view>
-        <view class="list">
-          <view class="swipe-cell" wx:for="{{group.records}}" wx:key="id" wx:for-item="record">
-            <view class="swipe-content" style="transform: translateX({{record.swipeX || 0}}px)"
-              data-gi="{{index}}" data-gk="{{group.label}}"
-              catchtouchstart="onSwipeStart"
-              catchtouchmove="onSwipeMove"
-              catchtouchend="onSwipeEnd"
-            >
-              <view class="item">
-                <view class="item-icon" style="background: {{record.color}}1f; color: {{record.color}};">
-                  <text>{{record.icon}}</text>
-                </view>
-                <view class="item-body">
-                  <view class="item-row1">
-                    <text class="item-action">{{record.action}}</text>
-                    <text class="item-target" wx:if="{{record.target}}">@{{record.target}}</text>
-                  </view>
-                  <text class="item-meta">{{record.date}} · {{record.note || '无备注'}}</text>
-                  <view class="item-stars">
-                    <text wx:for="{{[1,2,3,4,5]}}" wx:key="*this" class="s {{index < record.simpIndex ? 'on' : ''}}">★</text>
-                  </view>
-                </view>
-                <view class="item-end">
-                  <text class="item-amt" wx:if="{{record.amount > 0}}">¥{{record.amount}}</text>
-                </view>
-              </view>
-            </view>
-            <view class="swipe-del" data-id="{{record.id}}" bindtap="deleteItem">
-              <text>删除</text>
-            </view>
+  <view class="list-container" wx:else>
+    <view class="group-wrap" wx:for="{{groups}}" wx:key="label" wx:for-item="group">
+      <text class="group-title">{{group.label}}</text>
+      <view class="record-card" wx:for="{{group.records}}" wx:key="id" wx:for-item="record" bindlongpress="deleteItem" data-id="{{record.id}}">
+        <view class="rc-left">
+          <view class="rc-icon" style="background: {{record.color}}10;">
+            <image src="{{record.icon}}" style="width: 44rpx; height: 44rpx;" />
           </view>
+          <view class="rc-info">
+            <text class="rc-action">{{record.action}}</text>
+            <text class="rc-note">{{record.target ? '@' + record.target : (record.note || '无备注')}}</text>
+          </view>
+        </view>
+        <view class="rc-right">
+          <text class="rc-amount {{record.amountClass}}">{{record.amountLabel}}</text>
+          <text class="rc-date">{{record.date}}</text>
         </view>
       </view>
     </view>
