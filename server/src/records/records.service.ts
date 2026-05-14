@@ -44,4 +44,8 @@ export class RecordsService {
     }
     return { count: newRecords.length }
   }
+
+  async clearAll(userId: number): Promise<void> {
+    await this.recordRepo.delete({ userId })
+  }
 }

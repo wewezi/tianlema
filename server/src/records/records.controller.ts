@@ -36,4 +36,10 @@ export class RecordsController {
   sync(@CurrentUser() user: User, @Body() body: { records: CreateRecordDto[] }) {
     return this.recordsService.syncAll(user.id, body.records)
   }
+
+  @Delete()
+  @ApiOperation({ summary: '清空当前用户所有记录' })
+  clearAll(@CurrentUser() user: User) {
+    return this.recordsService.clearAll(user.id)
+  }
 }

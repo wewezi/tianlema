@@ -1,5 +1,5 @@
 import { getRecords } from '../../utils/store'
-import { request, isLoggedIn, getUserInfo, updateProfile } from '../../utils/api'
+import { request, isLoggedIn, getUserInfo, updateProfile, BASE_URL, uploadFile } from '../../utils/api'
 import { RANKS, calcScore, getRankProgress } from '../../utils/rank'
 import { ACHIEVEMENTS, getUnlockedAchievements } from '../../utils/achievements'
 
@@ -53,18 +53,36 @@ Component({
   methods: {
     loadProfile() {
       const info = getUserInfo()
+      let avatarUrl = info.avatarUrl || ''
+      if (avatarUrl && avatarUrl.startsWith('/')) {
+        avatarUrl = BASE_URL + avatarUrl
+      }
       this.setData({
         nickname: info.nickname || '',
-        avatarUrl: info.avatarUrl || '',
+        avatarUrl: avatarUrl,
       })
     },
 
-    onChooseAvatar(e: any) {
-      const avatarUrl = e.detail.avatarUrl
-      if (!avatarUrl) return
-      this.setData({ avatarUrl })
-      if (isLoggedIn()) {
-        updateProfile({ avatarUrl }).catch(console.error)
+    async onChooseAvatar(e: any) {
+      const localAvatarUrl = e.detail.avatarUrl
+      if (!localAvatarUrl) return
+
+      wx.showLoading({ title: '上传中...', mask: true })
+      try {
+        // 1. 上传头像到服务器
+        const serverAvatarUrl = await uploadFile(localAvatarUrl)
+        
+        // 2. 更新个人资料
+        await updateProfile({ avatarUrl: serverAvatarUrl })
+        
+        // 3. 更新页面显示（带上域名）
+        this.setData({ avatarUrl: BASE_URL + serverAvatarUrl })
+        wx.hideLoading()
+        wx.showToast({ title: '头像已同步', icon: 'success' })
+      } catch (err) {
+        wx.hideLoading()
+        console.error('更新头像失败', err)
+        wx.showToast({ title: '更新失败', icon: 'none' })
       }
     },
 
@@ -122,6 +140,31 @@ Component({
         data: json,
         success: () => {
           wx.showToast({ title: '已复制到剪贴板', icon: 'none' })
+        },
+      })
+    },
+
+    clearAllData() {
+      wx.showModal({
+        title: '确认销毁',
+        content: '这将永久删除服务器上所有的记录，此操作不可恢复！',
+        confirmText: '销毁',
+        confirmColor: '#ef4444',
+        success: async (res) => {
+          if (res.confirm) {
+            try {
+              wx.showLoading({ title: '正在销毁...', mask: true })
+              await request({ url: '/records', method: 'DELETE' })
+              wx.hideLoading()
+              wx.showToast({ title: '已全部销毁', icon: 'success' })
+              this.loadStats()
+              this.loadAchievements()
+            } catch (err) {
+              wx.hideLoading()
+              wx.showToast({ title: '操作失败', icon: 'none' })
+              console.error('销毁失败', err)
+            }
+          }
         },
       })
     },
