@@ -37,8 +37,8 @@ async function bootstrap() {
 
   if (!isProd) {
     const config = new DocumentBuilder()
-      .setTitle('舔了吗 API')
-      .setDescription('舔了吗微信小程序后端接口文档')
+      .setTitle('深情记录 API')
+      .setDescription('深情记录微信小程序后端接口文档')
       .setVersion('1.0')
       .addBearerAuth()
       .build()

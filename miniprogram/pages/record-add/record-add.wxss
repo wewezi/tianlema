@@ -125,15 +125,44 @@
 .tags-cloud.in .tag-token.active { background: #10b981; box-shadow: 0 8rpx 20rpx rgba(16,185,129,0.3); }
 .tags-cloud.none .tag-token.active { background: #8b5cf6; box-shadow: 0 8rpx 20rpx rgba(139,92,246,0.3); }
 
-.heart-rating {
+/* Mood Selector */
+.mood-selector {
   display: flex;
-  gap: 20rpx;
+  justify-content: space-between;
+  background: #f8fafc;
+  padding: 24rpx 20rpx;
+  border-radius: 30rpx;
 }
-.star-box {
-  padding: 10rpx;
-  transition: transform 0.2s ease;
+.mood-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  opacity: 0.5;
+  filter: grayscale(1);
 }
-.star-box:active { transform: scale(0.9); }
+.mood-item.active {
+  opacity: 1;
+  filter: grayscale(0);
+  transform: scale(1.15);
+}
+.mood-emoji {
+  font-size: 56rpx;
+  margin-bottom: 8rpx;
+  line-height: 1;
+}
+.mood-text {
+  font-size: 20rpx;
+  font-weight: 700;
+  color: #64748b;
+}
+.mood-item.active .mood-text {
+  color: #ff4d6a;
+}
+.mood-item:active {
+  transform: scale(0.9);
+}
 
 .premium-txa {
   width: 100%;

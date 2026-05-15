@@ -52,16 +52,17 @@
       </view>
 
       <view class="field animate-in" style="animation-delay: 0.4s;">
-        <text class="label">动心程度</text>
-        <view class="heart-rating">
-          <view
-            class="star-box"
-            wx:for="{{[1,2,3,4,5]}}"
-            wx:key="*this"
-            bindtap="pickStar"
-            data-v="{{item}}"
+        <text class="label">记录心情</text>
+        <view class="mood-selector">
+          <view 
+            class="mood-item {{simpIndex === index + 1 ? 'active' : ''}}" 
+            wx:for="{{moods}}" 
+            wx:key="text"
+            bindtap="pickMood"
+            data-v="{{index + 1}}"
           >
-            <image src="{{simpIndex >= item ? 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSIjZmY0ZDZhIj48cGF0aCBkPSJNMTIgMjEuMzVsLTEuNDUtMS4zMkM1LjQgMTUuMzYgMiAxMi4yOCAyIDguNSAyIDUuNDIgNC40MiAzIDcuNSAzYy44MSAwIDEuNS4xNyAyLjM1LjUzQzExLjA0IDIuNzggMTIuNjQgMyAxNSAzYzMuMDggMCA1LjUuMjIgNS41IDUuNSAwIDMuNzgtMy40IDYuODYtOC41NSAxMS41NEwxMiAyMS4zNXoiLz48L3N2Zz4=' : 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiNjYmQ1ZTEiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMjEuMzVsLTEuNDUtMS4zMkM1LjQgMTUuMzYgMiAxMi4yOCAyIDguNSAyIDUuNDIgNC40MiAzIDcuNSAzYy44MSAwIDEuNS4xNyAyLjM1LjUzQzExLjA0IDIuNzggMTIuNjQgMyAxNSAzYzMuMDggMCA1LjUuMjIgNS41IDUuNSAwIDMuNzgtMy40IDYuODYtOC41NSAxMS41NEwxMiAyMS4zNXoiLz48L3N2Zz4='}}" style="width: 48rpx; height: 48rpx;" />
+            <view class="mood-emoji">{{item.emoji}}</view>
+            <view class="mood-text">{{item.text}}</view>
           </view>
         </view>
       </view>

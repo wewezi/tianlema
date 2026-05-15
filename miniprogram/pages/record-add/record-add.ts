@@ -15,7 +15,14 @@ Component({
     customAction: '',
     target: '',
     amount: '',
-    simpIndex: 1,
+    simpIndex: 3, // 默认平静
+    moods: [
+      { emoji: '😭', text: '非常难过' },
+      { emoji: '🙁', text: '不开心' },
+      { emoji: '😐', text: '平静' },
+      { emoji: '🙂', text: '开心' },
+      { emoji: '🥰', text: '超快乐' }
+    ],
     showAmountField: true,
     note: '',
     formType: 'out' as 'in' | 'out' | 'none',
@@ -136,7 +143,7 @@ Component({
       })
     },
 
-    pickStar(e: any) {
+    pickMood(e: any) {
       wx.vibrateShort({ type: 'light' })
       this.setData({ simpIndex: e.currentTarget.dataset.v })
     },

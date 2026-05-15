@@ -6,7 +6,7 @@ import { AuthGuard } from '../common/guards/auth.guard'
 import { CurrentUser } from '../common/decorators/current-user.decorator'
 import { User } from '../auth/entities/user.entity'
 
-@ApiTags('舔狗记录')
+@ApiTags('深情记录')
 @ApiBearerAuth()
 @UseGuards(AuthGuard)
 @Controller('records')

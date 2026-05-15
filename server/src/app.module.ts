@@ -4,16 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ThrottlerModule } from '@nestjs/throttler'
 import { AuthModule } from './auth/auth.module'
 import { RecordsModule } from './records/records.module'
-import { CommunityModule } from './community/community.module'
 import { StatsModule } from './stats/stats.module'
+import { TodoModule } from './todo/todo.module'
 import { User } from './auth/entities/user.entity'
 import { Record } from './records/entities/record.entity'
-import { Post } from './community/entities/post.entity'
-import { PostLike } from './community/entities/post-like.entity'
-import { TreeholeModule } from './treehole/treehole.module'
+import { Todo } from './todo/entities/todo.entity'
 import { UploadModule } from './common/upload/upload.module'
-import { Confession } from './treehole/entities/confession.entity'
-import { ConfessionVote } from './treehole/entities/confession-vote.entity'
 import { HealthController } from './health.controller'
 
 @Module({
@@ -30,15 +26,14 @@ import { HealthController } from './health.controller'
         database: config.get<string>('DB_DATABASE'),
         username: config.get<string>('DB_USERNAME'),
         password: config.get<string>('DB_PASSWORD'),
-        entities: [User, Record, Post, PostLike, Confession, ConfessionVote],
+        entities: [User, Record, Todo],
         synchronize: config.get<string>('NODE_ENV') !== 'production',
       }),
     }),
     AuthModule,
     RecordsModule,
-    CommunityModule,
     StatsModule,
-    TreeholeModule,
+    TodoModule,
     UploadModule,
   ],
   controllers: [HealthController],

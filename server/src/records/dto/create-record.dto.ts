@@ -22,7 +22,7 @@ export class CreateRecordDto {
   @Min(0)
   amount: number
 
-  @ApiProperty({ description: '舔狗指数 1-5', minimum: 1, maximum: 5 })
+  @ApiProperty({ description: '心情指数 1-5', minimum: 1, maximum: 5 })
   @IsInt()
   @Min(1)
   @Max(5)

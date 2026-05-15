@@ -8,7 +8,7 @@ const ACTIONS_OUT = ['请吃饭', '送礼物', '发红包', '买东西', '转账
 const ACTIONS_IN = ['对方请客', '收到礼物', '收到红包', '对方回礼', '对方主动']
 const ACTIONS_NONE = ['陪聊天', '帮忙干活', '偷看主页', '换了头像', '梦见对方']
 const NO_MONEY_ACTIONS = ['陪聊天', '帮忙干活', '对方安慰', '对方帮忙']
-const SIMP_LABELS = ['略有心动', '情之所至', '深陷其中', '无可救药', '至死不渝']
+const SIMP_LABELS = ['非常难过', '有点不开心', '平静/一般', '比较开心', '超级快乐']
 const DAY_NAMES = ['日', '一', '二', '三', '四', '五', '六']
 
 Component({
@@ -136,7 +136,7 @@ Component({
       wx.showLoading({ title: '打卡中...', mask: true })
       setTimeout(() => {
         wx.hideLoading()
-        wx.showToast({ title: '深情值 +' + bonus, icon: 'none' })
+        wx.showToast({ title: '记录值 +' + bonus, icon: 'none' })
       }, 500)
     },
 

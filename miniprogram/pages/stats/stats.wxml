@@ -25,25 +25,25 @@
     <view class="stats-grid">
       <view class="stat-box">
         <text class="stat-v">{{totalEvents}}</text>
-        <text class="stat-l">深情时刻</text>
+        <text class="stat-l">深情记录</text>
       </view>
       <view class="stat-box">
         <text class="stat-v">¥{{totalAmount}}</text>
-        <text class="stat-l">累计付出</text>
+        <text class="stat-l">累计支出</text>
       </view>
       <view class="stat-box">
         <text class="stat-v">{{avgSimp}}</text>
-        <text class="stat-l">平均分</text>
+        <text class="stat-l">心情均值</text>
       </view>
       <view class="stat-box">
         <text class="stat-v">{{targetCount}}</text>
-        <text class="stat-l">眷恋对象</text>
+        <text class="stat-l">记录对象</text>
       </view>
     </view>
   </view>
 
   <view class="board-section" wx:if="{{topTargets.length > 0}}">
-    <text class="section-title">深情守候榜</text>
+    <text class="section-title">深情记录榜</text>
     <view class="board-card">
       <view class="b-row" wx:for="{{topTargets}}" wx:key="name">
         <view class="b-left">

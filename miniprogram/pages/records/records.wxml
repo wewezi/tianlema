@@ -3,12 +3,12 @@
   <view class="hero-card">
     <view class="hero-item">
       <text class="hero-val">{{totalCount}}</text>
-      <text class="hero-lbl">守护次数</text>
+      <text class="hero-lbl">记录次数</text>
     </view>
     <view class="hero-divider"></view>
     <view class="hero-item">
       <text class="hero-val">¥{{totalAmount}}</text>
-      <text class="hero-lbl">累计付出</text>
+      <text class="hero-lbl">累计支出</text>
     </view>
   </view>
 

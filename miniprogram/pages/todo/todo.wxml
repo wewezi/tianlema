@@ -1,0 +1,45 @@
+<view class="premium-page todo-page">
+  <view class="hero-card">
+    <view class="hero-item">
+      <text class="hero-val">{{completedCount}}</text>
+      <text class="hero-lbl">已达成</text>
+    </view>
+    <view class="hero-divider"></view>
+    <view class="hero-item">
+      <text class="hero-val">{{pendingCount}}</text>
+      <text class="hero-lbl">待完成</text>
+    </view>
+  </view>
+
+  <view class="input-card">
+    <input class="todo-input" placeholder="写下一件想为TA做的事..." value="{{inputValue}}" bindinput="onInput" bindconfirm="addTodo" confirm-type="done" />
+    <view class="add-btn {{inputValue ? 'active' : ''}}" bindtap="addTodo">
+      <text class="add-icon">+</text>
+    </view>
+  </view>
+
+  <view class="list-container" wx:if="{{todos.length > 0}}">
+    <view 
+      class="todo-card {{item.completed ? 'completed' : ''}}" 
+      wx:for="{{todos}}" 
+      wx:key="id"
+      bindtap="toggleTodo"
+      data-id="{{item.id}}"
+      bindlongpress="deleteTodo"
+    >
+      <view class="tc-left">
+        <view class="check-box {{item.completed ? 'checked' : ''}}">
+          <icon wx:if="{{item.completed}}" type="success_no_circle" color="#fff" size="12" />
+        </view>
+        <view class="tc-info">
+          <text class="todo-text">{{item.title}}</text>
+          <text class="todo-time" wx:if="{{!item.completed}}">{{item.timeLabel}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <text class="empty-text">心之所向，皆为序章</text>
+  </view>
+</view>

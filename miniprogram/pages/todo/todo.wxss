@@ -1,0 +1,186 @@
+.premium-page {
+  min-height: 100vh;
+  background: var(--c-bg, #f7f3f5);
+  padding: calc(env(safe-area-inset-top) + 40rpx) 40rpx calc(150rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* Hero Card - Matching records page */
+.hero-card {
+  background: #fff;
+  border-radius: var(--r-lg, 40rpx);
+  padding: 40rpx;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.03);
+  margin-bottom: 40rpx;
+  animation: slideDown 0.5s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-20rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.hero-val {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: var(--c-text);
+  margin-bottom: 4rpx;
+}
+
+.hero-lbl {
+  font-size: 24rpx;
+  color: var(--c-sub);
+  font-weight: 600;
+}
+
+.hero-divider {
+  width: 2rpx;
+  height: 40rpx;
+  background: #f0f0f0;
+}
+
+/* Input Card */
+.input-card {
+  background: #fff;
+  padding: 10rpx 10rpx 10rpx 40rpx;
+  border-radius: var(--r-lg, 40rpx);
+  display: flex;
+  align-items: center;
+  box-shadow: 0 10rpx 40rpx rgba(0, 0, 0, 0.03);
+  margin-bottom: 40rpx;
+}
+
+.todo-input {
+  flex: 1;
+  height: 100rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+}
+
+.add-btn {
+  width: 90rpx;
+  height: 90rpx;
+  background: #f8fafc;
+  border-radius: 34rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s;
+}
+
+.add-btn.active {
+  background: var(--c-pri);
+  box-shadow: 0 8rpx 20rpx var(--c-pri-pale);
+}
+
+.add-icon {
+  font-size: 44rpx;
+  color: #cbd5e1;
+  font-weight: 300;
+}
+
+.add-btn.active .add-icon {
+  color: #fff;
+  font-weight: 700;
+}
+
+/* List Container */
+.list-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.todo-card {
+  background: #fff;
+  border-radius: var(--r, 30rpx);
+  padding: 34rpx 40rpx;
+  margin-bottom: 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.02);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: fadeIn 0.5s ease-out;
+}
+
+.todo-card.completed {
+  background: #fafafa;
+  opacity: 0.7;
+}
+
+.tc-left {
+  display: flex;
+  align-items: center;
+  gap: 30rpx;
+  flex: 1;
+}
+
+.check-box {
+  width: 50rpx;
+  height: 50rpx;
+  border: 4rpx solid var(--c-pri-pale);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex-shrink: 0;
+}
+
+.check-box.checked {
+  background: var(--c-pri);
+  border-color: var(--c-pri);
+  transform: scale(1.05);
+}
+
+.tc-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+}
+
+.todo-text {
+  font-size: 32rpx;
+  font-weight: 700;
+  color: var(--c-text);
+  transition: all 0.3s;
+}
+
+.completed .todo-text {
+  text-decoration: line-through;
+  color: var(--c-sub);
+  font-weight: 500;
+}
+
+.todo-time {
+  font-size: 22rpx;
+  color: var(--c-hint);
+  font-weight: 500;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 120rpx 0;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: var(--c-hint);
+  font-weight: 600;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}

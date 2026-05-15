@@ -13,14 +13,8 @@ export class StatsController {
   constructor(private readonly statsService: StatsService) {}
 
   @Get()
-  @ApiOperation({ summary: '获取当前用户舔狗统计数据' })
+  @ApiOperation({ summary: '获取当前用户统计数据' })
   getStats(@CurrentUser() user: User) {
     return this.statsService.getStats(user.id)
-  }
-
-  @Get('ranking')
-  @ApiOperation({ summary: '获取全服舔狗排行榜' })
-  getRanking(@CurrentUser() user: User) {
-    return this.statsService.getRanking(user.id)
   }
 }

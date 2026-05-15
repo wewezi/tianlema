@@ -1,7 +1,7 @@
 <view class="premium-page index-page">
   <view class="index-header">
     <view class="status-glass">
-      <view class="status-main">{{weekTotal > 0 ? '本周已深情守候 ' + weekTotal + ' 次' : '此刻内心平静'}}</view>
+      <view class="status-main">{{weekTotal > 0 ? '本周已记录心情 ' + weekTotal + ' 次' : '此刻内心平静'}}</view>
       <view class="status-sub" wx:if="{{weekTotal > 0}}">累计心意价值 ¥{{weekAmount}}</view>
     </view>
   </view>
@@ -12,7 +12,7 @@
       <view class="pulse-wave w2"></view>
       <view class="giant-btn" bindtap="openForm" hover-class="giant-btn-active">
         <view class="giant-btn-inner">
-          <text class="btn-text">记录深情</text>
+          <text class="btn-text">记录心情</text>
         </view>
         <view class="btn-gloss"></view>
       </view>
@@ -23,7 +23,7 @@
   <view class="mission-section">
     <view class="mission-card {{challengeDone ? 'done' : ''}}" bindtap="toggleChallenge">
       <view class="m-left">
-        <text class="m-label">今日深情任务</text>
+        <text class="m-label">今日心情打卡</text>
         <text class="m-text">{{challengeDone ? '今日修行已圆满' : challengeText}}</text>
       </view>
       <view class="m-right">
