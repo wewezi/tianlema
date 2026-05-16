@@ -24,6 +24,12 @@ export class Record {
   @Column({ nullable: true, default: '' })
   note: string
 
+  @Column({ nullable: true, default: 'none' })
+  type: string
+
+  @Column('simple-json', { nullable: true })
+  images: string[]
+
   @Column()
   userId: number
 

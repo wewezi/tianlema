@@ -37,4 +37,14 @@ export class CreateRecordDto {
   @IsString()
   @IsOptional()
   note?: string
+
+  @ApiProperty({ description: '类型：out/支出，in/收入，none/中性', required: false })
+  @IsString()
+  @IsOptional()
+  type?: string
+
+  @ApiProperty({ description: '图片 URL 列表', required: false })
+  @IsString({ each: true })
+  @IsOptional()
+  images?: string[]
 }
