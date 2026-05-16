@@ -29,3 +29,13 @@ export function deleteRecord(id: string): Promise<void> {
 export function generateId(): string {
   return `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
 }
+
+export async function syncFromServer(): Promise<void> {
+  if (!isLoggedIn()) return
+  try {
+    const records = await getRecords()
+    wx.setStorageSync(KEY, records)
+  } catch (err) {
+    console.error('同步记录失败', err)
+  }
+}

@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from 'typeorm'
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm'
 import { User } from '../../auth/entities/user.entity'
 
 @Entity('todos')
@@ -21,7 +21,8 @@ export class Todo {
   @UpdateDateColumn()
   updatedAt: Date
 
-  @ManyToOne(() => User, (user) => user.id)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'userId' })
   user: User
 
   @Column()
